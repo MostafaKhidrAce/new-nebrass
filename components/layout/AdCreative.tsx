@@ -10,10 +10,19 @@ type AdCreativeProps = {
 
 export function AdCreative({ ad, className = "", sizes = "100vw" }: AdCreativeProps) {
   const image = (
-    <Image src={ad.img} alt={ad.alt} fill sizes={sizes} className="object-cover" />
+    <>
+      <Image
+        src={ad.img}
+        alt={ad.alt}
+        fill
+        sizes={sizes}
+        className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+      />
+      <span className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/45" />
+    </>
   );
 
-  const box = `relative block overflow-hidden rounded-md border border-border bg-white shadow-sm ${className}`;
+  const box = `group relative block overflow-hidden rounded-md border border-border bg-white shadow-sm ${className}`;
 
   if (ad.linkType === "external") {
     return (

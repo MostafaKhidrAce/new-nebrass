@@ -28,7 +28,7 @@ export function ArticleCard({
             alt={article.title}
             fill
             sizes="280px"
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
           />
         </div>
         {category && (
@@ -53,7 +53,7 @@ export function ArticleCard({
             alt={article.title}
             fill
             sizes="108px"
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
           />
         </div>
         <div className="min-w-0">
@@ -69,14 +69,14 @@ export function ArticleCard({
 
   if (variant === "horizontal") {
     return (
-      <Link href={href} className="group grid grid-cols-[140px_1fr] gap-3 overflow-hidden rounded-md border border-border bg-card shadow-sm">
-        <div className="relative min-h-[96px]">
+      <Link href={href} className="group grid grid-cols-[140px_1fr] gap-3 overflow-hidden rounded-md border border-border bg-card shadow-sm transition-shadow duration-300 hover:shadow-md">
+        <div className="relative min-h-[96px] overflow-hidden">
           <Image
             src={article.thumbnail}
             alt={article.title}
             fill
             sizes="140px"
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
           />
         </div>
         <div className="py-2 pe-3">
@@ -93,7 +93,7 @@ export function ArticleCard({
   const isFeatured = variant === "featured";
 
   return (
-    <article className="group h-full overflow-hidden rounded-md border border-border bg-card shadow-sm">
+    <article className="group h-full overflow-hidden rounded-md border border-border bg-card shadow-sm transition-shadow duration-300 hover:shadow-md">
       <Link href={href} className="flex h-full flex-col">
         <div
           className={`relative overflow-hidden ${
@@ -106,7 +106,7 @@ export function ArticleCard({
             fill
             priority={priority}
             sizes={isFeatured ? "(max-width: 768px) 100vw, 60vw" : "(max-width: 768px) 100vw, 25vw"}
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
           />
         </div>
         <div className={isFeatured ? "p-3.5" : "p-2.5"}>

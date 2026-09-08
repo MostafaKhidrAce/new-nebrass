@@ -16,15 +16,23 @@ function CameraIcon() {
 
 function FeaturedAdPanel({ ad }: { ad: Ad }) {
   const panel = (
-    <span className="relative block h-[280px] w-full overflow-hidden md:h-[340px] lg:h-[380px]">
-      <Image src={ad.img} alt={ad.alt} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" priority />
-      <span className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/20" />
+    <span className="group relative block h-[280px] w-full overflow-hidden md:h-[340px] lg:h-[380px]">
+      <Image
+        src={ad.img}
+        alt={ad.alt}
+        fill
+        sizes="(max-width: 768px) 100vw, 33vw"
+        className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+        priority
+      />
+      <span className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/20 transition-colors duration-300 group-hover:from-black/85 group-hover:via-black/55 group-hover:to-black/40" />
+      <span className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/25" />
       {ad.title && (
         <span className="absolute inset-x-4 top-[28%] text-center text-base font-bold leading-snug text-white drop-shadow-md md:top-[30%] md:text-lg lg:text-xl">
           {ad.title}
         </span>
       )}
-      <span className="absolute bottom-5 left-1/2 flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full bg-white shadow-md">
+      <span className="absolute bottom-5 left-1/2 flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full bg-white shadow-md transition group-hover:scale-110">
         <CameraIcon />
       </span>
     </span>

@@ -29,12 +29,18 @@ export function MediaSection({ items, title = "الوسائط" }: MediaSectionPr
             key={item.id}
             type="button"
             onClick={() => setActive(item)}
-            className="group overflow-hidden rounded-md border border-border bg-card text-start shadow-sm"
+            className="group overflow-hidden rounded-md border border-border bg-card text-start shadow-sm transition-shadow duration-300 hover:shadow-md"
           >
-            <div className="relative aspect-[16/10]">
-              <Image src={item.thumbnail} alt={item.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
-              <span className="absolute inset-0 flex items-center justify-center bg-navy/25">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-accent-media">
+            <div className="relative aspect-[16/10] overflow-hidden">
+              <Image
+                src={item.thumbnail}
+                alt={item.title}
+                fill
+                sizes="(max-width: 768px) 100vw, 33vw"
+                className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+              />
+              <span className="absolute inset-0 flex items-center justify-center bg-navy/25 transition-colors duration-300 group-hover:bg-navy/40">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-accent-media transition group-hover:scale-110">
                   <Play className="h-5 w-5 fill-current" />
                 </span>
               </span>
