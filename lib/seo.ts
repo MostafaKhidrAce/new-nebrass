@@ -22,7 +22,7 @@ export function articleSeoDescription(article: Article): string {
   return body.slice(0, 220);
 }
 
-export function articleMetadata(article: Article): Metadata {
+export function articleMetadata(article: Article, section?: string): Metadata {
   const title = article.title;
   const description = articleSeoDescription(article);
   const url = absoluteUrl(`/article/${article.id}`);
@@ -45,6 +45,7 @@ export function articleMetadata(article: Article): Metadata {
       title,
       description,
       publishedTime: article.date,
+      section,
       images: [image],
     },
     twitter: {

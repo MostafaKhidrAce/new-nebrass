@@ -24,13 +24,8 @@ export async function generateMetadata({
   const article = await getArticleById(id);
   if (!article) return { title: "المادة غير موجودة", robots: { index: false } };
   const category = await getCategoryBySlug(article.category);
-  const meta = articleMetadata(article);
   return {
-    ...meta,
-    openGraph: {
-      ...meta.openGraph,
-      section: category?.name,
-    },
+    ...articleMetadata(article, category?.name),
     other: {
       "article:section": category?.name ?? SITE_NAME,
     },
