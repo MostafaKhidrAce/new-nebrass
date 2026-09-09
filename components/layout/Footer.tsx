@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+// import Image from "next/image";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { InstagramIcon, XIcon, YoutubeIcon } from "@/components/shared/SocialIcons";
 import { CONTACT, SITE_DESCRIPTION, SOCIAL_LINKS, USEFUL_LINKS } from "@/lib/config";
@@ -90,7 +90,7 @@ export function Footer({ staticCategories }: FooterProps) {
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-3 py-3">
           <p className="text-[11px] text-white/60">© 2026. جميع الحقوق محفوظة</p>
-          <Image src="/logos/Orca-tech logo.svg" alt="" width={80} height={88} className="h-5 w-auto" />
+          {/* <Image src="/logos/Orca-tech logo.svg" alt="" width={80} height={88} className="h-5 w-auto" /> */}
         </div>
       </div>
     </footer>
