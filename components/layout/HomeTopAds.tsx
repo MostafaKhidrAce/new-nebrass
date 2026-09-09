@@ -1,69 +1,36 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { OverlayMediaCard } from "@/components/shared/OverlayMediaCard";
 import type { Ad } from "@/lib/types";
 
-function CameraIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4 text-black" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-      <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
-      <circle cx="12" cy="13" r="3" />
-    </svg>
-  );
-}
-
-function FeaturedAdPanel({ ad }: { ad: Ad }) {
-  const panel = (
-    <span className="group relative block h-[280px] w-full overflow-hidden md:h-[340px] lg:h-[380px]">
-      <Image
-        src={ad.img}
-        alt={ad.alt}
-        fill
-        sizes="(max-width: 768px) 100vw, 33vw"
-        className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-        priority
-      />
-      <span className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/20 transition-colors duration-300 group-hover:from-black/85 group-hover:via-black/55 group-hover:to-black/40" />
-      <span className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/25" />
-      {ad.title && (
-        <span className="absolute inset-x-4 top-[28%] text-center text-base font-bold leading-snug text-white drop-shadow-md md:top-[30%] md:text-lg lg:text-xl">
-          {ad.title}
-        </span>
-      )}
-      <span className="absolute bottom-5 left-1/2 flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full bg-white shadow-md transition group-hover:scale-110">
-        <CameraIcon />
-      </span>
-    </span>
-  );
-
-  if (ad.linkType === "external") {
-    return (
-      <a href={ad.link} target="_blank" rel="noopener noreferrer" className="block">
-        {panel}
-      </a>
-    );
-  }
-
-  return (
-    <Link href={ad.link} className="block">
-      {panel}
-    </Link>
-  );
-}
-
-/** Homepage-only full-width 3-panel strip above the navbar. */
-export function HomeTopAds({ ads }: { ads: Ad[] }) {
+/** Homepage-only strip: 50% + 25% + 25% like al-jazirahonline.com (Zeen block-86). */
+export function HomeTopAds({ ads, className = "" }: { ads: Ad[]; className?: string }) {
   const pathname = usePathname();
   if (pathname !== "/" || ads.length === 0) return null;
 
+  const panels = ads.slice(0, 3);
+
   return (
-    <aside className="w-full bg-black" aria-label="مساحة إعلانية">
-      <div className="grid grid-cols-1 md:grid-cols-3">
-        {ads.map((ad) => (
-          <FeaturedAdPanel key={ad.id} ad={ad} />
-        ))}
+    <aside className={`w-full bg-black ${className}`} aria-label="مساحة إعلانية">
+      <div className="grid grid-cols-2 md:grid-cols-4">
+        {panels.map((ad, index) => {
+          const isLead = index === 0;
+          return (
+            <div key={ad.id} className={isLead ? "col-span-2" : "col-span-1"}>
+              <OverlayMediaCard
+                src={ad.img}
+                alt={ad.alt}
+                title={ad.title}
+                href={ad.link}
+                external={ad.linkType === "external"}
+                priority={isLead}
+                className="h-[240px] sm:h-[300px] md:h-[400px] lg:h-[480px]"
+                sizes={isLead ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 50vw, 25vw"}
+              />
+            </div>
+          );
+        })}
       </div>
     </aside>
   );

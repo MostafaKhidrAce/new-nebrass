@@ -9,7 +9,6 @@ import { AdSlot } from "@/components/layout/AdSlot";
 import { getAd } from "@/lib/api/ads";
 import { getAllArticles, getArticleById, getRelatedArticles } from "@/lib/api/articles";
 import { getCategoryBySlug } from "@/lib/api/categories";
-import { SITE_NAME } from "@/lib/config";
 import { articleJsonLd, articleMetadata } from "@/lib/seo";
 
 export async function generateStaticParams() {
@@ -27,7 +26,7 @@ export async function generateMetadata({
   return {
     ...articleMetadata(article, category?.name),
     other: {
-      "article:section": category?.name ?? SITE_NAME,
+      "article:section": category?.name ?? "أخبار",
     },
   };
 }

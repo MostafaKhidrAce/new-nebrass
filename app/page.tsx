@@ -7,10 +7,10 @@ import { getAds } from "@/lib/api/ads";
 import { getArticlesByCategory, getFeaturedArticles } from "@/lib/api/articles";
 import { getAllCategories, getStaticNewsCategories } from "@/lib/api/categories";
 import { getMediaItems } from "@/lib/api/media";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE } from "@/lib/config";
+import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/config";
 
 export const metadata: Metadata = {
-  title: { absolute: `${SITE_NAME} | ${SITE_TAGLINE}` },
+  title: { absolute: SITE_NAME },
   description: SITE_DESCRIPTION,
   alternates: { canonical: "/" },
 };
@@ -32,20 +32,22 @@ export default async function HomePage() {
   );
 
   return (
-    <div className="mx-auto max-w-6xl space-y-7 px-3 py-5">
-      <HeroSection articles={featured} categories={allCategories} />
+    <>
+      <div className="mx-auto max-w-6xl space-y-7 px-3 py-5">
+        <HeroSection articles={featured} categories={allCategories} />
 
-      {sections.map((section, index) => (
-        <div key={section.category.slug} className="space-y-7">
-          {(index === 2 || index === 5) && sectionAds[index === 2 ? 0 : 1] && (
-            <AdSlot ads={[sectionAds[index === 2 ? 0 : 1]]} />
-          )}
-          <CategorySection category={section.category} articles={section.articles} />
-        </div>
-      ))}
+        {sections.map((section, index) => (
+          <div key={section.category.slug} className="space-y-7">
+            {(index === 2 || index === 5) && sectionAds[index === 2 ? 0 : 1] && (
+              <AdSlot ads={[sectionAds[index === 2 ? 0 : 1]]} />
+            )}
+            <CategorySection category={section.category} articles={section.articles} />
+          </div>
+        ))}
 
-      {sectionAds[2] && <AdSlot ads={[sectionAds[2]]} />}
+        {sectionAds[2] && <AdSlot ads={[sectionAds[2]]} />}
+      </div>
       <MediaSection items={media} />
-    </div>
+    </>
   );
 }

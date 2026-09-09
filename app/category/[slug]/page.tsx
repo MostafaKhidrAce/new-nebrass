@@ -5,7 +5,6 @@ import { getAd } from "@/lib/api/ads";
 import { getArticlesByCategory } from "@/lib/api/articles";
 import { getAllCategories, getCategoryBySlug } from "@/lib/api/categories";
 import { getAccentClass } from "@/lib/mock/categories";
-import { SITE_NAME } from "@/lib/config";
 import { absoluteUrl } from "@/lib/seo";
 
 export async function generateStaticParams() {
@@ -22,7 +21,7 @@ export async function generateMetadata({
   const category = await getCategoryBySlug(slug);
   if (!category) return { title: "القسم غير موجود", robots: { index: false } };
   const title = category.name;
-  const description = `آخر أخبار ${category.name} على ${SITE_NAME} — تغطية متجددة وأبرز المواد في هذا القسم.`;
+  const description = `آخر أخبار ${category.name} — تغطية متجددة وأبرز المواد في هذا القسم.`;
   const url = absoluteUrl(category.href);
   return {
     title,

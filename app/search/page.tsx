@@ -8,7 +8,7 @@ export async function generateMetadata({ searchParams }: PageProps<"/search">): 
   const query = Array.isArray(q) ? (q[0] ?? "") : (q ?? "");
   return {
     title: query ? `نتائج البحث: ${query}` : "البحث",
-    description: query ? `نتائج البحث في منارة عن «${query}»` : "ابحث في أرشيف منارة الإخباري.",
+    description: query ? `نتائج البحث عن «${query}»` : "ابحث في الأرشيف الإخباري.",
     robots: { index: false, follow: true },
   };
 }

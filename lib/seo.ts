@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/config";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/config";
 import type { Article } from "@/lib/types";
 
 export function absoluteUrl(path = "/"): string {
@@ -86,7 +86,7 @@ export const rootOpenGraph: Metadata["openGraph"] = {
   type: "website",
   siteName: SITE_NAME,
   locale: "ar_SA",
-  title: `${SITE_NAME} | ${SITE_TAGLINE}`,
+  title: SITE_NAME,
   description: SITE_DESCRIPTION,
   url: SITE_URL,
 };

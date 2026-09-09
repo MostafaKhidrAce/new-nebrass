@@ -30,7 +30,7 @@ export function ImageGallery({ images, alt }: ImageGalleryProps) {
         ))}
       </div>
       {active && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy/85 p-4" role="dialog" aria-modal>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-chrome/85 p-4" role="dialog" aria-modal>
           <button type="button" className="absolute end-4 top-4 text-white" onClick={() => setActive(null)} aria-label="إغلاق">
             <X className="h-6 w-6" />
           </button>

@@ -49,7 +49,7 @@ export function SearchOverlay({ onClose, categories }: SearchOverlayProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-navy/75 px-3 pt-16 backdrop-blur-[2px] sm:pt-24"
+      className="fixed inset-0 z-50 bg-chrome/75 px-3 pt-16 backdrop-blur-[2px] sm:pt-24"
       role="dialog"
       aria-modal
       aria-labelledby={titleId}
@@ -60,7 +60,7 @@ export function SearchOverlay({ onClose, categories }: SearchOverlayProps) {
         onClick={(event) => event.stopPropagation()}
       >
         <div className="flex items-center gap-3 border-b border-border px-4 py-3">
-          <Search className="h-5 w-5 shrink-0 text-gold" />
+          <Search className="h-5 w-5 shrink-0 text-navy" />
           <h2 id={titleId} className="sr-only">
             البحث
           </h2>
@@ -73,7 +73,7 @@ export function SearchOverlay({ onClose, categories }: SearchOverlayProps) {
             onKeyDown={(event) => {
               if (event.key === "Enter") goToResults(query);
             }}
-            placeholder="ابحث في منارة عن خبر أو موضوع..."
+            placeholder="ابحث عن خبر أو موضوع..."
             className="w-full bg-transparent text-base outline-none placeholder:text-muted"
           />
           {query && (
@@ -96,7 +96,7 @@ export function SearchOverlay({ onClose, categories }: SearchOverlayProps) {
                     key={term}
                     type="button"
                     onClick={() => goToResults(term)}
-                    className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-navy hover:border-gold hover:text-gold"
+                    className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-navy hover:bg-neutral-50"
                   >
                     {term}
                   </button>
@@ -141,7 +141,7 @@ export function SearchOverlay({ onClose, categories }: SearchOverlayProps) {
           <Link
             href={`/search?q=${encodeURIComponent(query.trim())}`}
             onClick={onClose}
-            className="block border-t border-border py-3 text-center text-sm font-bold text-navy hover:bg-neutral-50 hover:text-gold"
+            className="block border-t border-border py-3 text-center text-sm font-bold text-navy hover:bg-neutral-50"
           >
             عرض كل النتائج
           </Link>

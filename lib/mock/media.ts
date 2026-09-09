@@ -14,7 +14,7 @@ export const MEDIA_ITEMS: MediaItem[] = [
   },
   {
     id: "m2",
-    title: "تغطية خاصة: كيف تُدار غرفة الأخبار في منارة؟",
+    title: "تغطية خاصة: كيف تُدار غرفة الأخبار؟",
     thumbnail: img(1016),
     youtubeId: "jNQXAC9IVRw",
     date: "2026-09-05T16:30:00.000Z",

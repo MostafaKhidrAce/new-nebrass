@@ -36,7 +36,7 @@ export function ArticleCard({
             <CategoryBadge name={category.name} accent={category.accent} />
           </div>
         )}
-        <h3 className="mt-1.5 line-clamp-3 text-sm font-bold leading-6 text-navy group-hover:text-gold">
+        <h3 className="mt-1.5 line-clamp-3 text-sm font-bold leading-6 text-navy group-hover:opacity-80">
           {article.title}
         </h3>
         <time className="mt-1 block text-[11px] text-muted">{formatArabicDate(article.date)}</time>
@@ -58,7 +58,7 @@ export function ArticleCard({
         </div>
         <div className="min-w-0">
           {category && <CategoryBadge name={category.name} accent={category.accent} />}
-          <h3 className="mt-1 line-clamp-2 text-sm font-bold leading-5 text-navy group-hover:text-gold">
+          <h3 className="mt-1 line-clamp-2 text-sm font-bold leading-5 text-navy group-hover:opacity-80">
             {article.title}
           </h3>
           <time className="mt-1 block text-[11px] text-muted">{formatArabicDate(article.date)}</time>
@@ -81,7 +81,7 @@ export function ArticleCard({
         </div>
         <div className="py-2 pe-3">
           {category && <CategoryBadge name={category.name} accent={category.accent} />}
-          <h3 className="mt-1 line-clamp-2 text-sm font-bold leading-5 text-navy group-hover:text-gold">
+          <h3 className="mt-1 line-clamp-2 text-sm font-bold leading-5 text-navy group-hover:opacity-80">
             {article.title}
           </h3>
           <p className="mt-1 line-clamp-2 text-xs leading-5 text-muted">{article.excerpt}</p>
@@ -112,7 +112,7 @@ export function ArticleCard({
         <div className={isFeatured ? "p-3.5" : "p-2.5"}>
           {category && <CategoryBadge name={category.name} accent={category.accent} />}
           <h3
-            className={`mt-1.5 font-extrabold leading-snug text-navy group-hover:text-gold ${
+            className={`mt-1.5 font-extrabold leading-snug text-navy group-hover:opacity-80 ${
               isFeatured ? "line-clamp-3 text-lg md:text-xl" : "line-clamp-2 text-sm"
             }`}
           >

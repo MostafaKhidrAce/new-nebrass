@@ -1,7 +1,7 @@
-export const SITE_NAME = "منارة";
-export const SITE_TAGLINE = "نبض الخبر… من كل الجهات";
+export const SITE_NAME = "أخبار";
+export const SITE_TAGLINE = "تغطية إخبارية يومية";
 export const SITE_DESCRIPTION =
-  "منارة منصة إخبارية عربية مستقلة تتابع أبرز التطورات في المملكة والعالم، وتقدّم تقارير عميقة وتغطيات متنوعة في الرياضة والثقافة والمجتمع.";
+  "منصة إخبارية عربية تتابع أبرز التطورات في المملكة والعالم، وتقدّم تقارير عميقة وتغطيات متنوعة في الرياضة والثقافة والمجتمع.";
 export const SITE_URL = "https://manara.example";
 
 export const CONTACT = {
@@ -10,7 +10,7 @@ export const CONTACT = {
   poBox: "ص.ب 1200 – الرياض 11564",
   phone: "011-400-2200",
   fax: "011-400-2299",
-  email: "info@manara.example",
+  email: "info@example.com",
 };
 
 export const SOCIAL_LINKS = {
