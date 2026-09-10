@@ -51,7 +51,13 @@ export function LoadMoreGrid({ slug, initialItems, initialHasMore, category, ad 
             disabled={loading}
             className="rounded-md bg-navy px-5 py-2 text-sm font-semibold text-white hover:bg-navy/90 disabled:opacity-60"
           >
-            {loading ? "جاري التحميل..." : "تحميل المزيد"}
+            {category?.locale === "en"
+              ? loading
+                ? "Loading..."
+                : "Load more"
+              : loading
+                ? "جاري التحميل..."
+                : "تحميل المزيد"}
           </button>
         </div>
       )}

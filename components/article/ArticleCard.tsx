@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CategoryBadge } from "@/components/shared/CategoryBadge";
 import type { Article, Category } from "@/lib/types";
-import { formatArabicDate } from "@/lib/utils/formatDate";
+import { formatArticleDate } from "@/lib/utils/formatDate";
 
 type ArticleCardProps = {
   article: Article;
@@ -18,6 +18,8 @@ export function ArticleCard({
   priority = false,
 }: ArticleCardProps) {
   const href = `/article/${article.id}`;
+  const dateLabel = formatArticleDate(article.date, article, category);
+
 
   if (variant === "mega") {
     return (
@@ -39,7 +41,7 @@ export function ArticleCard({
         <h3 className="mt-1.5 line-clamp-3 text-sm font-bold leading-6 text-navy group-hover:opacity-80">
           {article.title}
         </h3>
-        <time className="mt-1 block text-[11px] text-muted">{formatArabicDate(article.date)}</time>
+        <time className="mt-1 block text-[11px] text-muted">{dateLabel}</time>
       </Link>
     );
   }
@@ -61,7 +63,7 @@ export function ArticleCard({
           <h3 className="mt-1 line-clamp-2 text-sm font-bold leading-5 text-navy group-hover:opacity-80">
             {article.title}
           </h3>
-          <time className="mt-1 block text-[11px] text-muted">{formatArabicDate(article.date)}</time>
+          <time className="mt-1 block text-[11px] text-muted">{dateLabel}</time>
         </div>
       </Link>
     );
@@ -121,7 +123,7 @@ export function ArticleCard({
           {isFeatured && (
             <p className="mt-1.5 line-clamp-2 text-sm leading-6 text-muted">{article.excerpt}</p>
           )}
-          <time className="mt-1.5 block text-[11px] text-muted">{formatArabicDate(article.date)}</time>
+          <time className="mt-1.5 block text-[11px] text-muted">{dateLabel}</time>
         </div>
       </Link>
     </article>

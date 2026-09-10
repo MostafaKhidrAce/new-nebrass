@@ -22,7 +22,7 @@ export function articleSeoDescription(article: Article): string {
   return body.slice(0, 220);
 }
 
-export function articleMetadata(article: Article, section?: string): Metadata {
+export function articleMetadata(article: Article, section?: string, english = false): Metadata {
   const title = article.title;
   const description = articleSeoDescription(article);
   const url = absoluteUrl(`/article/${article.id}`);
@@ -40,7 +40,7 @@ export function articleMetadata(article: Article, section?: string): Metadata {
     openGraph: {
       type: "article",
       siteName: SITE_NAME,
-      locale: "ar_SA",
+      locale: english ? "en_GB" : "ar_SA",
       url,
       title,
       description,
@@ -57,7 +57,7 @@ export function articleMetadata(article: Article, section?: string): Metadata {
   };
 }
 
-export function articleJsonLd(article: Article, categoryName?: string) {
+export function articleJsonLd(article: Article, categoryName?: string, english = false) {
   return {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
@@ -67,7 +67,7 @@ export function articleJsonLd(article: Article, categoryName?: string) {
     datePublished: article.date,
     dateModified: article.date,
     mainEntityOfPage: absoluteUrl(`/article/${article.id}`),
-    inLanguage: "ar",
+    inLanguage: english ? "en" : "ar",
     articleSection: categoryName,
     author: {
       "@type": "Organization",

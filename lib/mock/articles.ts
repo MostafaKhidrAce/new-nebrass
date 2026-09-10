@@ -15,9 +15,19 @@ type Seed = {
   date: string;
   featured?: boolean;
   gallery?: boolean;
+  lang?: "ar" | "en";
 };
 
 function buildDescription(seed: Seed): string {
+  if (seed.lang === "en") {
+    return `<p>The newsroom followed developments around “${seed.title}”, with officials briefing the public as confirmed details arrived over the past hours.</p>
+<p>${seed.excerpt} Coverage continues as editors place the story in a wider local and regional context, without exaggeration or omission of verified facts.</p>
+<h2>${seed.heading}</h2>
+<p>Observers say the next phase will need clearer coordination among the agencies involved, with public channels kept open and the record updated as new information is confirmed.</p>
+<blockquote>${seed.quote}</blockquote>
+<p>This report will be updated when additional confirmed information becomes available.</p>`;
+  }
+
   return `<p>تابعت غرفة الأخبار التطورات المرتبطة بموضوع «${seed.title}»، حيث تواصلت الجهات المعنية مع الرأي العام وقدّمت إحاطات متتابعة حول ما جرى على الأرض خلال الساعات الماضية.</p>
 <p>${seed.excerpt} ويأتي هذا الاهتمام في سياق تغطية أوسع تسعى إلى وضع الحدث في إطاره المحلي والإقليمي دون مبالغة أو اختزال.</p>
 <h2>${seed.heading}</h2>
@@ -40,10 +50,124 @@ function fromSeed(seed: Seed): Article {
       : undefined,
     date: seed.date,
     featured: seed.featured,
+    lang: seed.lang,
   };
 }
 
 const SEEDS: Seed[] = [
+  // News (English)
+  {
+    id: "news-1",
+    category: "news",
+    lang: "en",
+    title: "Cities extend late-night bus routes to ease evening traffic",
+    excerpt: "Transport authorities opened a trial of extra late services on busy corridors, aiming to shorten peak travel times for commuters heading home after work.",
+    heading: "What the new timetable changes",
+    quote: "Every minute saved on the evening commute is time returned to households at the end of the week.",
+    pic: 10,
+    date: "2026-09-09T08:15:00.000Z",
+    gallery: true,
+  },
+  {
+    id: "news-2",
+    category: "news",
+    lang: "en",
+    title: "Coastal flood alerts go live ahead of autumn storms",
+    excerpt: "A new warning network now covers harbours and low-lying neighbourhoods, with public sirens and phone alerts tested before the seasonal rains.",
+    heading: "How residents will be warned",
+    quote: "Preparedness before the siren matters more than speed after it sounds.",
+    pic: 20,
+    date: "2026-09-08T14:40:00.000Z",
+  },
+  {
+    id: "news-3",
+    category: "news",
+    lang: "en",
+    title: "Universities add extra seats in AI and climate programmes",
+    excerpt: "The expansion includes partner campuses in Asia and Europe, with graduates expected to return to national research and infrastructure projects.",
+    heading: "Priority fields for the next intake",
+    quote: "A scholarship is not a ticket abroad. It is a development contract with the country that sent you.",
+    pic: 29,
+    date: "2026-09-07T09:20:00.000Z",
+  },
+  {
+    id: "news-4",
+    category: "news",
+    lang: "en",
+    title: "Housing agencies speed up delivery in mid-size cities",
+    excerpt: "The latest batch of ready units is aimed at regional centres, in a bid to ease pressure on the largest metropolitan housing markets.",
+    heading: "Where the new homes are going",
+    quote: "Stable housing is still the first social policy that actually works.",
+    pic: 42,
+    date: "2026-09-06T11:05:00.000Z",
+  },
+  {
+    id: "news-5",
+    category: "news",
+    lang: "en",
+    title: "Northern reserves report a rebound in oryx numbers",
+    excerpt: "Spring monitoring found a clear recovery after years of habitat restoration and tighter protection against illegal hunting.",
+    heading: "What the census shows",
+    quote: "The return of a threatened species is quiet news, and it is the kind that lasts.",
+    pic: 48,
+    date: "2026-09-05T07:50:00.000Z",
+  },
+  {
+    id: "news-6",
+    category: "news",
+    lang: "en",
+    title: "Extra evening trains added between major cities",
+    excerpt: "Operators say the new departures will ease weekend crowding and give visitors a later option without driving after dark.",
+    heading: "Changes to the passenger timetable",
+    quote: "A reliable rail link creates a habit of travel, not just a seasonal trip.",
+    pic: 57,
+    date: "2026-09-03T16:30:00.000Z",
+  },
+  {
+    id: "news-7",
+    category: "news",
+    lang: "en",
+    title: "Small firms call for simpler e-invoicing rules",
+    excerpt: "Owners say first-year compliance costs remain higher than expected, even as digital filing becomes mandatory across more sectors.",
+    heading: "Compliance should not choke growth",
+    quote: "A digital system succeeds when it cuts paperwork, not when it reprints the same forms on a screen.",
+    pic: 64,
+    date: "2026-09-01T10:10:00.000Z",
+  },
+  {
+    id: "news-8",
+    category: "news",
+    lang: "en",
+    title: "Weekend ferry trials connect ports with nearby islands",
+    excerpt: "The short sea routes are aimed at families and must meet strict marine-safety rules before a full seasonal launch.",
+    heading: "The coast as a nearby destination",
+    quote: "A close sea crossing can replace a long road trip when the timetable is honest.",
+    pic: 76,
+    date: "2026-08-29T13:25:00.000Z",
+  },
+  {
+    id: "news-9",
+    category: "news",
+    lang: "en",
+    title: "Business confidence hits a two-year high on local demand",
+    excerpt: "The quarterly reading rose on stronger domestic orders and more stable shipping costs, according to the latest survey of firms.",
+    heading: "What sits behind the number",
+    quote: "Confidence is a fragile measure until it turns into hiring and investment decisions.",
+    pic: 83,
+    date: "2026-08-26T06:40:00.000Z",
+  },
+  {
+    id: "news-10",
+    category: "news",
+    lang: "en",
+    title: "Public libraries trial bilingual evening reading hours",
+    excerpt: "The programme pairs English and Arabic sessions for families, with volunteer readers and a small stock of new titles in both languages.",
+    heading: "Why evenings were chosen",
+    quote: "A library that stays open after work is a public square with shelves.",
+    pic: 96,
+    date: "2026-08-22T18:00:00.000Z",
+  },
+
   // المملكة
   {
     id: "ksa-1",

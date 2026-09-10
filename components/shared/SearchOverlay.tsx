@@ -8,7 +8,7 @@ import { Search, X } from "lucide-react";
 import { CategoryBadge } from "@/components/shared/CategoryBadge";
 import { searchArticles } from "@/lib/api/articles";
 import type { Article, Category } from "@/lib/types";
-import { formatArabicDate } from "@/lib/utils/formatDate";
+import { formatArticleDate } from "@/lib/utils/formatDate";
 
 const SUGGESTIONS = ["الرياض", "الرياضة", "العلا", "التقنية", "المرأة", "المناخ"];
 
@@ -127,7 +127,9 @@ export function SearchOverlay({ onClose, categories }: SearchOverlayProps) {
                       <div className="min-w-0">
                         {category && <CategoryBadge name={category.name} accent={category.accent} />}
                         <p className="mt-1 line-clamp-2 text-sm font-bold leading-5 text-navy">{article.title}</p>
-                        <time className="mt-0.5 block text-[11px] text-muted">{formatArabicDate(article.date)}</time>
+                        <time className="mt-0.5 block text-[11px] text-muted">
+                          {formatArticleDate(article.date, article, category)}
+                        </time>
                       </div>
                     </Link>
                   </li>

@@ -20,8 +20,11 @@ export async function generateMetadata({
   const { slug } = await params;
   const category = await getCategoryBySlug(slug);
   if (!category) return { title: "القسم غير موجود", robots: { index: false } };
+  const isEnglish = category.locale === "en";
   const title = category.name;
-  const description = `آخر أخبار ${category.name} — تغطية متجددة وأبرز المواد في هذا القسم.`;
+  const description = isEnglish
+    ? `Latest ${category.name} — rolling coverage and standout stories in this section.`
+    : `آخر أخبار ${category.name} — تغطية متجددة وأبرز المواد في هذا القسم.`;
   const url = absoluteUrl(category.href);
   return {
     title,
@@ -32,7 +35,7 @@ export async function generateMetadata({
       title,
       description,
       url,
-      locale: "ar_SA",
+      locale: isEnglish ? "en_GB" : "ar_SA",
     },
     twitter: {
       card: "summary",
@@ -56,12 +59,16 @@ export default async function CategoryPage({ params }: PageProps<"/category/[slu
     getAd("section"),
   ]);
 
+  const isEnglish = category.locale === "en";
+
   return (
-    <div className="mx-auto max-w-6xl px-3 py-5">
+    <div className="mx-auto max-w-6xl px-3 py-5" dir={isEnglish ? "ltr" : undefined} lang={isEnglish ? "en" : undefined}>
       <header className="mb-5 flex items-center gap-2 border-b border-border pb-3">
         <span className={`h-5 w-1.5 rounded-full ${getAccentClass(category.accent)}`} />
         <h1 className="text-xl font-extrabold text-navy">{category.name}</h1>
-        <span className="text-xs text-muted">({page.total} مواد)</span>
+        <span className="text-xs text-muted">
+          ({page.total} {isEnglish ? "articles" : "مواد"})
+        </span>
       </header>
       <LoadMoreGrid
         slug={slug}

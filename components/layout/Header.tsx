@@ -136,12 +136,16 @@ export function Header({ staticCategories, dynamicCategories, megaMenu, classNam
       </div>
 
       {showMegaPanel && hoveredCategory && (
-        <div className="absolute inset-x-0 top-full z-50 border-t border-border bg-white text-navy shadow-xl">
+        <div
+          className="absolute inset-x-0 top-full z-50 border-t border-border bg-white text-navy shadow-xl"
+          dir={hoveredCategory.locale === "en" ? "ltr" : undefined}
+          lang={hoveredCategory.locale === "en" ? "en" : undefined}
+        >
           <div className="mx-auto max-w-6xl px-3 py-5">
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-base font-extrabold">{hoveredCategory.name}</h3>
               <Link href={hoveredCategory.href} className="text-xs font-semibold hover:underline">
-                عرض كل المواد
+                {hoveredCategory.locale === "en" ? "View all articles" : "عرض كل المواد"}
               </Link>
             </div>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">

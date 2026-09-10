@@ -7,16 +7,17 @@ import { X } from "lucide-react";
 type ImageGalleryProps = {
   images: string[];
   alt: string;
+  english?: boolean;
 };
 
-export function ImageGallery({ images, alt }: ImageGalleryProps) {
+export function ImageGallery({ images, alt, english = false }: ImageGalleryProps) {
   const [active, setActive] = useState<string | null>(null);
 
   if (images.length === 0) return null;
 
   return (
     <section className="mt-6">
-      <h2 className="mb-2 text-sm font-bold text-navy">معرض الصور</h2>
+      <h2 className="mb-2 text-sm font-bold text-navy">{english ? "Photo gallery" : "معرض الصور"}</h2>
       <div className="grid grid-cols-3 gap-2">
         {images.map((src, index) => (
           <button
@@ -31,7 +32,12 @@ export function ImageGallery({ images, alt }: ImageGalleryProps) {
       </div>
       {active && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-chrome/85 p-4" role="dialog" aria-modal>
-          <button type="button" className="absolute end-4 top-4 text-white" onClick={() => setActive(null)} aria-label="إغلاق">
+          <button
+            type="button"
+            className="absolute end-4 top-4 text-white"
+            onClick={() => setActive(null)}
+            aria-label={english ? "Close" : "إغلاق"}
+          >
             <X className="h-6 w-6" />
           </button>
           <div className="relative h-[80vh] w-full max-w-4xl">

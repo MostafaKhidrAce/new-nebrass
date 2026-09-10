@@ -27,10 +27,20 @@ export const MEDIA_CATEGORY: Category = {
   href: "/media",
 };
 
+export const NEWS_CATEGORY: Category = {
+  slug: "news",
+  name: "News",
+  kind: "static",
+  accent: "news",
+  href: "/category/news",
+  locale: "en",
+};
+
 export const STATIC_NAV_CATEGORIES: Category[] = [
   HOME_CATEGORY,
   ...STATIC_NEWS_CATEGORIES,
   MEDIA_CATEGORY,
+  NEWS_CATEGORY,
 ];
 
 export const DYNAMIC_CATEGORIES: Category[] = [
@@ -58,6 +68,7 @@ const ACCENT_CLASS: Record<string, string> = {
   tech: "bg-accent-tech",
   travel: "bg-accent-travel",
   economy: "bg-accent-economy",
+  news: "bg-accent-news",
 };
 
 export function getAccentClass(accent: string): string {

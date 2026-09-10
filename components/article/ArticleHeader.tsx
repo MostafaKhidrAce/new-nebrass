@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { CategoryBadge } from "@/components/shared/CategoryBadge";
 import type { Article, Category } from "@/lib/types";
-import { formatArabicDate } from "@/lib/utils/formatDate";
+import { formatArticleDate } from "@/lib/utils/formatDate";
 
 type ArticleHeaderProps = {
   article: Article;
@@ -10,11 +10,13 @@ type ArticleHeaderProps = {
 };
 
 export function ArticleHeader({ article, category }: ArticleHeaderProps) {
+  const isEnglish = category?.locale === "en" || article.lang === "en";
+
   return (
     <header>
       <nav className="mb-3 flex flex-wrap items-center gap-1.5 text-[11px] text-muted">
         <Link href="/" className="hover:text-navy">
-          الرئيسية
+          {isEnglish ? "Home" : "الرئيسية"}
         </Link>
         <span>/</span>
         {category && (
@@ -39,7 +41,7 @@ export function ArticleHeader({ article, category }: ArticleHeaderProps) {
       </div>
       <div className="mt-3 flex flex-wrap items-center gap-2">
         {category && <CategoryBadge name={category.name} accent={category.accent} href={category.href} />}
-        <time className="text-xs text-muted">{formatArabicDate(article.date)}</time>
+        <time className="text-xs text-muted">{formatArticleDate(article.date, article, category)}</time>
       </div>
       <h1 className="mt-2 text-2xl font-extrabold leading-snug text-navy md:text-3xl">{article.title}</h1>
     </header>

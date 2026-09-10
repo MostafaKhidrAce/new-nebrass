@@ -9,6 +9,7 @@ export interface Article {
   date: string;
   excerpt: string;
   featured?: boolean;
+  lang?: "ar" | "en";
 }
 
 export interface Category {
@@ -17,6 +18,7 @@ export interface Category {
   kind: "static" | "dynamic";
   accent: string;
   href: string;
+  locale?: "ar" | "en";
 }
 
 export interface MediaItem {

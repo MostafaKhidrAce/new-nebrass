@@ -13,8 +13,13 @@ export function CategorySection({ category, articles }: CategorySectionProps) {
   const [featured, ...rest] = articles;
 
   return (
-    <section>
-      <SectionHeader title={category.name} href={category.href} accent={category.accent} />
+    <section dir={category.locale === "en" ? "ltr" : undefined} lang={category.locale === "en" ? "en" : undefined}>
+      <SectionHeader
+        title={category.name}
+        href={category.href}
+        accent={category.accent}
+        locale={category.locale}
+      />
       <div className="grid gap-3 md:grid-cols-4">
         <div className="md:col-span-2">
           <ArticleCard article={featured} category={category} variant="featured" />

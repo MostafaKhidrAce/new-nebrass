@@ -1,6 +1,7 @@
 import {
   ALL_CATEGORIES,
   DYNAMIC_CATEGORIES,
+  NEWS_CATEGORY,
   STATIC_NAV_CATEGORIES,
   STATIC_NEWS_CATEGORIES,
 } from "@/lib/mock/categories";
@@ -13,6 +14,10 @@ export async function getStaticCategories(): Promise<Category[]> {
 
 export async function getStaticNewsCategories(): Promise<Category[]> {
   return STATIC_NEWS_CATEGORIES;
+}
+
+export async function getNewsCategory(): Promise<Category> {
+  return NEWS_CATEGORY;
 }
 
 export async function getDynamicCategories(): Promise<Category[]> {

@@ -5,7 +5,7 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { MediaSection } from "@/components/home/MediaSection";
 import { getAds } from "@/lib/api/ads";
 import { getArticlesByCategory, getFeaturedArticles } from "@/lib/api/articles";
-import { getAllCategories, getStaticNewsCategories } from "@/lib/api/categories";
+import { getAllCategories, getNewsCategory, getStaticNewsCategories } from "@/lib/api/categories";
 import { getMediaItems } from "@/lib/api/media";
 import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/config";
 
@@ -16,20 +16,24 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const [featured, newsCategories, allCategories, media, sectionAds] = await Promise.all([
+  const [featured, newsCategories, englishNews, allCategories, media, sectionAds] = await Promise.all([
     getFeaturedArticles(),
     getStaticNewsCategories(),
+    getNewsCategory(),
     getAllCategories(),
     getMediaItems(),
     getAds("section"),
   ]);
 
-  const sections = await Promise.all(
-    newsCategories.map(async (category) => ({
-      category,
-      articles: (await getArticlesByCategory(category.slug, 1, 8)).items,
-    })),
-  );
+  const [sections, englishArticles] = await Promise.all([
+    Promise.all(
+      newsCategories.map(async (category) => ({
+        category,
+        articles: (await getArticlesByCategory(category.slug, 1, 8)).items,
+      })),
+    ),
+    getArticlesByCategory(englishNews.slug, 1, 8),
+  ]);
 
   return (
     <>
@@ -48,6 +52,9 @@ export default async function HomePage() {
         {sectionAds[2] && <AdSlot ads={[sectionAds[2]]} />}
       </div>
       <MediaSection items={media} />
+      <div className="mx-auto max-w-6xl px-3 py-5">
+        <CategorySection category={englishNews} articles={englishArticles.items} />
+      </div>
     </>
   );
 }

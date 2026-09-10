@@ -12,9 +12,10 @@ export async function getAllArticles(): Promise<Article[]> {
 }
 
 export async function getFeaturedArticles(limit = 7): Promise<Article[]> {
-  const featured = ARTICLES.filter((article) => article.featured).sort(byDateDesc);
+  const pool = ARTICLES.filter((article) => article.lang !== "en");
+  const featured = pool.filter((article) => article.featured).sort(byDateDesc);
   const used = new Set(featured.map((article) => article.id));
-  const extras = ARTICLES.filter((article) => !used.has(article.id)).sort(byDateDesc);
+  const extras = pool.filter((article) => !used.has(article.id)).sort(byDateDesc);
   return [...featured, ...extras].slice(0, limit);
 }
 

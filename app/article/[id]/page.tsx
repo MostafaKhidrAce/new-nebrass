@@ -23,10 +23,11 @@ export async function generateMetadata({
   const article = await getArticleById(id);
   if (!article) return { title: "المادة غير موجودة", robots: { index: false } };
   const category = await getCategoryBySlug(article.category);
+  const isEnglish = category?.locale === "en" || article.lang === "en";
   return {
-    ...articleMetadata(article, category?.name),
+    ...articleMetadata(article, category?.name, isEnglish),
     other: {
-      "article:section": category?.name ?? "أخبار",
+      "article:section": category?.name ?? (isEnglish ? "News" : "أخبار"),
     },
   };
 }
@@ -43,20 +44,26 @@ export default async function ArticlePage({ params }: PageProps<"/article/[id]">
     getAd("article-bottom"),
   ]);
 
+  const isEnglish = category?.locale === "en" || article.lang === "en";
+
   return (
-    <article className="mx-auto max-w-3xl px-3 py-5">
+    <article
+      className="mx-auto max-w-3xl px-3 py-5"
+      dir={isEnglish ? "ltr" : undefined}
+      lang={isEnglish ? "en" : undefined}
+    >
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd(article, category?.name)) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd(article, category?.name, isEnglish)) }}
       />
       <ArticleHeader article={article} category={category} />
       <div className="mt-4">
-        <ShareButtons path={`/article/${article.id}`} title={article.title} />
+        <ShareButtons path={`/article/${article.id}`} title={article.title} english={isEnglish} />
       </div>
       <div className="mt-5">
         <ArticleBody html={article.description} ad={inContentAd} />
       </div>
-      {article.images && <ImageGallery images={article.images} alt={article.title} />}
+      {article.images && <ImageGallery images={article.images} alt={article.title} english={isEnglish} />}
       {bottomAd && <AdSlot ads={[bottomAd]} className="mt-6" />}
       <RelatedArticles articles={related} category={category} />
     </article>

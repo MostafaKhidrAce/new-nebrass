@@ -5,7 +5,7 @@ import { Header } from "@/components/layout/Header";
 import { HomeTopAds } from "@/components/layout/HomeTopAds";
 import { getAds } from "@/lib/api/ads";
 import { getLatestByCategory } from "@/lib/api/articles";
-import { getDynamicCategories, getStaticCategories, getStaticNewsCategories } from "@/lib/api/categories";
+import { getDynamicCategories, getNewsCategory, getStaticCategories, getStaticNewsCategories } from "@/lib/api/categories";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/config";
 import { rootOpenGraph } from "@/lib/seo";
 import "./globals.css";
@@ -42,15 +42,18 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const [staticCategories, dynamicCategories, newsCategories, homeTopAds] = await Promise.all([
+  const [staticCategories, dynamicCategories, newsCategories, englishNews, homeTopAds] = await Promise.all([
     getStaticCategories(),
     getDynamicCategories(),
     getStaticNewsCategories(),
+    getNewsCategory(),
     getAds("home-top"),
   ]);
 
   const megaEntries = await Promise.all(
-    newsCategories.map(async (category) => [category.slug, await getLatestByCategory(category.slug, 6)] as const),
+    [...newsCategories, englishNews].map(
+      async (category) => [category.slug, await getLatestByCategory(category.slug, 6)] as const,
+    ),
   );
   const megaMenu = Object.fromEntries(megaEntries);
 

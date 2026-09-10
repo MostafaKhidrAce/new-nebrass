@@ -1,6 +1,8 @@
 import Link from "next/link";
 // import Image from "next/image";
 import { Mail, MapPin, Phone } from "lucide-react";
+import { BackToTop } from "@/components/layout/BackToTop";
+import { LogoAdSlot } from "@/components/layout/LogoAdSlot";
 import { InstagramIcon, XIcon, YoutubeIcon } from "@/components/shared/SocialIcons";
 import { CONTACT, SITE_DESCRIPTION, SOCIAL_LINKS, USEFUL_LINKS } from "@/lib/config";
 import type { Category } from "@/lib/types";
@@ -12,10 +14,10 @@ type FooterProps = {
 export function Footer({ staticCategories }: FooterProps) {
   return (
     <footer className="mt-8 bg-chrome text-white">
-      <div className="mx-auto grid max-w-6xl gap-8 px-3 py-8 md:grid-cols-4">
-        <div className="md:col-span-1">
-          <p className="text-xs leading-6 text-white/75">{SITE_DESCRIPTION}</p>
-          <div className="mt-3 flex gap-2.5">
+      <div className="border-b border-white/10 py-8">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-3">
+          <LogoAdSlot inverted />
+          <div className="flex items-center gap-3">
             <a href={SOCIAL_LINKS.twitter} aria-label="إكس" className="opacity-80 hover:opacity-100">
               <XIcon className="h-4 w-4" />
             </a>
@@ -26,6 +28,13 @@ export function Footer({ staticCategories }: FooterProps) {
               <YoutubeIcon className="h-4 w-4" />
             </a>
           </div>
+        </div>
+      </div>
+
+      <div className="mx-auto grid max-w-6xl gap-8 px-3 py-8 md:grid-cols-4">
+        <div className="md:col-span-1">
+          <h3 className="mb-3 text-sm font-bold text-white">من نحن</h3>
+          <p className="text-xs leading-6 text-white/75">{SITE_DESCRIPTION}</p>
         </div>
 
         <div>
@@ -90,6 +99,7 @@ export function Footer({ staticCategories }: FooterProps) {
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-3 py-3">
           <p className="text-[11px] text-white/60">© 2026. جميع الحقوق محفوظة</p>
+          <BackToTop />
           {/* <Image src="/logos/Orca-tech logo.svg" alt="" width={80} height={88} className="h-5 w-auto" /> */}
         </div>
       </div>
