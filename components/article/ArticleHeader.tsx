@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { RemoteImage } from "@/components/shared/RemoteImage";
 import { CategoryBadge } from "@/components/shared/CategoryBadge";
 import type { Article, Category } from "@/lib/types";
 import { displayArticleDate } from "@/lib/utils/formatDate";
@@ -30,7 +30,7 @@ export function ArticleHeader({ article, category }: ArticleHeaderProps) {
         <span className="line-clamp-1 text-navy">{article.title}</span>
       </nav>
       <div className="relative aspect-[16/8] overflow-hidden rounded-md">
-        <Image
+        <RemoteImage
           src={article.mainImage}
           alt={article.title}
           fill

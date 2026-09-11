@@ -8,6 +8,7 @@ const API_PLACEMENT: Record<AdPlacement, string> = {
   section: "home_mid",
   "article-in-content": "article_top",
   "article-bottom": "article_bottom",
+  nav: "nav",
 };
 
 export async function getAds(placement: AdPlacement): Promise<Ad[]> {
@@ -17,7 +18,7 @@ export async function getAds(placement: AdPlacement): Promise<Ad[]> {
   }
 
   const json = await apiGet<{ data: ApiAd[] }>(`/ads?placement=${API_PLACEMENT[placement]}`);
-  return json.data.map(mapAd);
+  return json.data.slice(0, 1).map(mapAd);
 }
 
 export async function getAd(placement: AdPlacement): Promise<Ad | undefined> {

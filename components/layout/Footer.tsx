@@ -20,7 +20,7 @@ export function Footer({ staticCategories, settings }: FooterProps) {
     <footer className="mt-8 bg-chrome text-white">
       <div className="border-b border-white/10 py-8">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-3">
-          <LogoAdSlot inverted />
+          <LogoAdSlot inverted ad={settings.navAd} />
           <div className="flex items-center gap-3">
             <a href={settings.social.x} aria-label="إكس" className="opacity-80 hover:opacity-100">
               <XIcon className="h-4 w-4" />

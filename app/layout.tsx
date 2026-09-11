@@ -6,7 +6,7 @@ import { HomeTopAds } from "@/components/layout/HomeTopAds";
 import { getAds } from "@/lib/api/ads";
 import { getDynamicCategories, getMegaMenu, getStaticCategories } from "@/lib/api/categories";
 import { getSettings } from "@/lib/api/settings";
-import { SITE_URL } from "@/lib/config";
+import { SITE_DESCRIPTION, SITE_URL } from "@/lib/config";
 import "./globals.css";
 
 const notoKufi = Noto_Kufi_Arabic({
@@ -15,41 +15,32 @@ const notoKufi = Noto_Kufi_Arabic({
   display: "swap",
 });
 
-export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSettings();
-  return {
-    metadataBase: new URL(SITE_URL),
-    title: {
-      default: settings.siteName,
-      template: `%s | ${settings.siteName}`,
-    },
-    description: settings.tagline,
-    applicationName: settings.siteName,
-    authors: [{ name: settings.siteName, url: SITE_URL }],
-    creator: settings.siteName,
-    publisher: settings.siteName,
-    keywords: ["أخبار", "المملكة", "العالم", "رياضة", "تقارير"],
-    alternates: { canonical: "/" },
-    icons: settings.faviconUrl ? { icon: settings.faviconUrl } : undefined,
-    openGraph: {
-      type: "website",
-      siteName: settings.siteName,
-      locale: "ar_SA",
-      title: settings.siteName,
-      description: settings.tagline,
-      url: SITE_URL,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: settings.siteName,
-      description: settings.tagline,
-    },
-    robots: {
-      index: true,
-      follow: true,
-    },
-  };
-}
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "الرئيسية",
+    template: "%s",
+  },
+  description: SITE_DESCRIPTION,
+  keywords: ["أخبار", "المملكة", "العالم", "رياضة", "تقارير"],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "ar_SA",
+    title: "الرئيسية",
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "الرئيسية",
+    description: SITE_DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const [settings, staticCategories, dynamicCategories, megaMenu, homeTopAds] = await Promise.all([
@@ -72,6 +63,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             currentDate={settings.currentDate}
             currentDateFormatted={settings.currentDateFormatted}
             social={settings.social}
+            navAd={settings.navAd}
           />
           <HomeTopAds ads={homeTopAds} className="order-2 md:order-1" />
         </div>

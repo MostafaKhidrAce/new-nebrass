@@ -1,8 +1,7 @@
 import { cache } from "react";
 import { apiGet } from "@/lib/api/http";
-import { mapArticleCard, mapListedCategory } from "@/lib/api/mappers";
-import { NEWS_ARTICLES } from "@/lib/api/news";
-import { HOME_CATEGORY, NEWS_CATEGORY } from "@/lib/mock/categories";
+import { mapArticleCard, mapListedCategory, normalizeSlug } from "@/lib/api/mappers";
+import { HOME_CATEGORY } from "@/lib/mock/categories";
 import type { ApiCategoryListItem, Article, Category } from "@/lib/types";
 
 export const getApiCategories = cache(async (): Promise<ApiCategoryListItem[]> => {
@@ -13,23 +12,12 @@ export const getApiCategories = cache(async (): Promise<ApiCategoryListItem[]> =
 export async function getStaticCategories(): Promise<Category[]> {
   const api = await getApiCategories();
   const system = api.filter((category) => category.is_system).map(mapListedCategory);
-  return [HOME_CATEGORY, ...system, NEWS_CATEGORY];
+  return [HOME_CATEGORY, ...system];
 }
 
 export async function getDynamicCategories(): Promise<Category[]> {
   const api = await getApiCategories();
   return api.filter((category) => !category.is_system).map(mapListedCategory);
-}
-
-export async function getStaticNewsCategories(): Promise<Category[]> {
-  const api = await getApiCategories();
-  return api
-    .filter((category) => category.is_system && category.slug !== "media")
-    .map(mapListedCategory);
-}
-
-export async function getNewsCategory(): Promise<Category> {
-  return NEWS_CATEGORY;
 }
 
 export async function getAllCategories(): Promise<Category[]> {
@@ -41,17 +29,15 @@ export async function getAllCategories(): Promise<Category[]> {
 }
 
 export async function getCategoryBySlug(slug: string): Promise<Category | undefined> {
-  if (slug === "home") return HOME_CATEGORY;
-  if (slug === "news") return NEWS_CATEGORY;
+  const needle = normalizeSlug(slug);
+  if (needle === "home") return HOME_CATEGORY;
   const all = await getAllCategories();
-  return all.find((category) => category.slug === slug);
+  return all.find((category) => normalizeSlug(category.slug) === needle);
 }
 
 export async function getMegaMenu(): Promise<Record<string, Article[]>> {
   const api = await getApiCategories();
-  const mega: Record<string, Article[]> = {
-    news: NEWS_ARTICLES.slice(0, 6),
-  };
+  const mega: Record<string, Article[]> = {};
 
   for (const category of api) {
     if (!category.is_system || category.slug === "media") continue;

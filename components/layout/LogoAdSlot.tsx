@@ -1,10 +1,30 @@
+import { AdCreative } from "@/components/layout/AdCreative";
+import type { Ad } from "@/lib/types";
+
 type LogoAdSlotProps = {
   compact?: boolean;
   inverted?: boolean;
+  ad?: Ad;
 };
 
-/** Placeholder ad that sits where a publication logo would normally go. */
-export function LogoAdSlot({ compact = false, inverted = false }: LogoAdSlotProps) {
+/** Nav ad near the header/footer, or a dashed placeholder when none is published. */
+export function LogoAdSlot({ compact = false, inverted = false, ad }: LogoAdSlotProps) {
+  if (ad) {
+    return (
+      <AdCreative
+        ad={ad}
+        className={
+          compact
+            ? "h-8 w-[7.5rem] rounded-none border-white/40"
+            : inverted
+              ? "h-[70px] w-[280px] max-w-full rounded-none border-white/30"
+              : "h-[70px] w-[280px] max-w-full rounded-none"
+        }
+        sizes={compact ? "120px" : "280px"}
+      />
+    );
+  }
+
   const className = compact
     ? inverted
       ? "flex h-8 w-[7.5rem] items-center justify-center border border-white/40 bg-white/10 text-[11px] font-bold text-white"

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useState } from "react";
-import Image from "next/image";
+import { RemoteImage } from "@/components/shared/RemoteImage";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Search, X } from "lucide-react";
@@ -141,7 +141,7 @@ export function SearchOverlay({ onClose, categories }: SearchOverlayProps) {
                       className="flex gap-3 rounded-md p-2 hover:bg-neutral-50"
                     >
                       <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded">
-                        <Image src={article.thumbnail} alt={article.title} fill sizes="96px" className="object-cover" />
+                        <RemoteImage src={article.thumbnail} alt={article.title} fill sizes="96px" className="object-cover" />
                       </div>
                       <div className="min-w-0">
                         {category && <CategoryBadge name={category.name} accent={category.accent} />}

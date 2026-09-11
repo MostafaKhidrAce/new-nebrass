@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { RemoteImage } from "@/components/shared/RemoteImage";
 import Link from "next/link";
 import type { Ad } from "@/lib/types";
 
@@ -11,7 +11,7 @@ type AdCreativeProps = {
 export function AdCreative({ ad, className = "", sizes = "100vw" }: AdCreativeProps) {
   const image = (
     <>
-      <Image
+      <RemoteImage
         src={ad.img}
         alt={ad.alt}
         fill

@@ -13,6 +13,8 @@ export interface Article {
   lang?: "ar" | "en";
   mediaType?: "image" | "video";
   videoUrl?: string | null;
+  youtubeId?: string | null;
+  embedUrl?: string | null;
   source?: { name: string | null; url: string | null };
 }
 
@@ -44,7 +46,7 @@ export interface PaginatedArticles {
 /** internal = same tab (e.g. /article/ksa-1); external = new tab (e.g. https://portal.sideup.co/) */
 export type AdLinkType = "internal" | "external";
 
-export type AdPlacement = "home-top" | "section" | "article-in-content" | "article-bottom";
+export type AdPlacement = "home-top" | "section" | "article-in-content" | "article-bottom" | "nav";
 
 export interface Ad {
   id: string;
@@ -57,14 +59,13 @@ export interface Ad {
 }
 
 export interface SiteSettings {
-  siteName: string;
   tagline: string;
-  faviconUrl: string | null;
   aboutHtml: string;
   contact: { phone: string; email: string; address: string };
   social: { youtube: string; instagram: string; x: string };
   currentDate: string;
   currentDateFormatted: string;
+  navAd?: Ad;
 }
 
 export interface ArticlePageData {
@@ -98,6 +99,10 @@ export interface ApiArticleCard {
   category: ApiCategoryRef;
   published_at: string;
   published_at_formatted: string;
+  video_url?: string | null;
+  embed_url?: string | null;
+  youtube_id?: string | null;
+  is_imported?: boolean;
 }
 
 export interface ApiCategoryListItem extends ApiCategoryRef {
@@ -118,27 +123,24 @@ export interface ApiAd {
 
 export interface ApiArticleDetail extends ApiArticleCard {
   body_html: string;
-  video_url: string | null;
   source: { name: string | null; url: string | null };
   created_at_formatted?: string;
   updated_at_formatted?: string;
 }
 
 export interface ApiSettings {
-  site_name: string;
   tagline: string;
-  logo_url: string | null;
-  favicon_url: string | null;
-  primary_color: string | null;
   about_html: string;
   contact: { phone: string; email: string; address: string };
   social: { youtube: string; instagram: string; x: string };
+  nav_ad: ApiAd | null;
   current_date: string;
   current_date_formatted: string;
 }
 
 export interface ApiHomeData {
   hero_ads: ApiAd[];
+  nav_ad?: ApiAd | null;
   home_mid_ad: ApiAd | null;
   home_bottom_ad: ApiAd | null;
   featured_article: ApiArticleCard | null;

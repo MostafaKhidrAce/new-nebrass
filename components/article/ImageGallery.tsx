@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import { RemoteImage } from "@/components/shared/RemoteImage";
 import { X } from "lucide-react";
 
 type ImageGalleryProps = {
@@ -26,7 +26,7 @@ export function ImageGallery({ images, alt, english = false }: ImageGalleryProps
             onClick={() => setActive(src)}
             className="relative aspect-[4/3] overflow-hidden rounded-md"
           >
-            <Image src={src} alt={`${alt} ${index + 1}`} fill sizes="200px" className="object-cover" />
+            <RemoteImage src={src} alt={`${alt} ${index + 1}`} fill sizes="200px" className="object-cover" />
           </button>
         ))}
       </div>
@@ -41,7 +41,7 @@ export function ImageGallery({ images, alt, english = false }: ImageGalleryProps
             <X className="h-6 w-6" />
           </button>
           <div className="relative h-[80vh] w-full max-w-4xl">
-            <Image src={active} alt={alt} fill className="object-contain" sizes="90vw" />
+            <RemoteImage src={active} alt={alt} fill className="object-contain" sizes="90vw" />
           </div>
         </div>
       )}

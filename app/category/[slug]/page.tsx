@@ -1,24 +1,21 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
+import { AdSlot } from "@/components/layout/AdSlot";
 import { LoadMoreGrid } from "@/components/shared/LoadMore";
 import { getCategoryPage } from "@/lib/api/articles";
-import { getAllCategories, getCategoryBySlug } from "@/lib/api/categories";
 import { getAccentClass } from "@/lib/mock/categories";
+import { normalizeSlug } from "@/lib/api/mappers";
 import { absoluteUrl } from "@/lib/seo";
 
-export async function generateStaticParams() {
-  const categories = await getAllCategories();
-  return categories
-    .filter((category) => category.slug !== "home" && category.slug !== "media")
-    .map((category) => ({ slug: category.slug }));
-}
+export const dynamicParams = true;
 
 export async function generateMetadata({
   params,
 }: PageProps<"/category/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const category = await getCategoryBySlug(slug);
-  if (!category) return { title: "القسم غير موجود", robots: { index: false } };
+  const page = await getCategoryPage(normalizeSlug(slug), 1);
+  if (!page) return { title: "القسم غير موجود", robots: { index: false } };
+  const { category } = page;
   const isEnglish = category.locale === "en";
   const title = category.name;
   const description = isEnglish
@@ -46,16 +43,15 @@ export async function generateMetadata({
 
 export default async function CategoryPage({ params }: PageProps<"/category/[slug]">) {
   const { slug } = await params;
+  const normalized = normalizeSlug(slug);
 
-  if (slug === "home") redirect("/");
-  if (slug === "media") redirect("/media");
-  if (slug === "misc") redirect("/category/variety");
+  if (normalized === "home") redirect("/");
+  if (normalized === "media") redirect("/media");
+  if (normalized === "misc") redirect("/category/variety");
 
-  const category = await getCategoryBySlug(slug);
-  if (!category) notFound();
-
-  const page = await getCategoryPage(slug, 1);
+  const page = await getCategoryPage(normalized, 1);
   if (!page) notFound();
+  const { category } = page;
   const isEnglish = category.locale === "en";
 
   return (
@@ -67,13 +63,19 @@ export default async function CategoryPage({ params }: PageProps<"/category/[slu
           ({page.total} {isEnglish ? "articles" : "مواد"})
         </span>
       </header>
-      <LoadMoreGrid
-        slug={slug}
-        initialItems={page.items}
-        initialHasMore={page.hasMore}
-        category={category}
-        ad={page.bannerAd}
-      />
+      {page.bannerAd && <AdSlot ads={[page.bannerAd]} className="mb-5" />}
+      {page.items.length === 0 ? (
+        <p className="rounded-md border border-dashed border-border bg-white p-8 text-center text-sm text-muted">
+          {isEnglish ? "No articles in this section yet." : "لا توجد مواد في هذا القسم حالياً."}
+        </p>
+      ) : (
+        <LoadMoreGrid
+          slug={category.slug}
+          initialItems={page.items}
+          initialHasMore={page.hasMore}
+          category={category}
+        />
+      )}
     </div>
   );
 }

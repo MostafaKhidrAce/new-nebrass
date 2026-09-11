@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { RemoteImage } from "@/components/shared/RemoteImage";
 import Link from "next/link";
 import { CategoryBadge } from "@/components/shared/CategoryBadge";
 import type { Article, Category } from "@/lib/types";
@@ -25,7 +25,7 @@ export function ArticleCard({
     return (
       <Link href={href} className="group block">
         <div className="relative aspect-[16/10] overflow-hidden rounded-md">
-          <Image
+          <RemoteImage
             src={article.thumbnail}
             alt={article.title}
             fill
@@ -50,7 +50,7 @@ export function ArticleCard({
     return (
       <Link href={href} className="group flex w-full gap-2.5">
         <div className="relative h-[72px] w-[108px] shrink-0 overflow-hidden rounded-md">
-          <Image
+          <RemoteImage
             src={article.thumbnail}
             alt={article.title}
             fill
@@ -73,7 +73,7 @@ export function ArticleCard({
     return (
       <Link href={href} className="group grid grid-cols-[140px_1fr] gap-3 overflow-hidden rounded-md border border-border bg-card shadow-sm transition-shadow duration-300 hover:shadow-md">
         <div className="relative min-h-[96px] overflow-hidden">
-          <Image
+          <RemoteImage
             src={article.thumbnail}
             alt={article.title}
             fill
@@ -102,7 +102,7 @@ export function ArticleCard({
             isFeatured ? "min-h-[220px] flex-1" : "aspect-[16/10]"
           }`}
         >
-          <Image
+          <RemoteImage
             src={isFeatured ? article.mainImage : article.thumbnail}
             alt={article.title}
             fill

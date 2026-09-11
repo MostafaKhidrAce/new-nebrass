@@ -19,10 +19,15 @@ export function MediaSection({ items, title = "الوسائط" }: MediaSectionPr
   const [opening, setOpening] = useState<string | null>(null);
 
   async function openItem(item: MediaItem) {
+    if (item.youtubeId) {
+      setActive(item);
+      return;
+    }
+
     setOpening(item.id);
     try {
       const article = await getArticleBySlug(item.id);
-      const youtubeId = youtubeIdFromUrl(article?.videoUrl);
+      const youtubeId = article?.youtubeId || youtubeIdFromUrl(article?.videoUrl) || youtubeIdFromUrl(article?.embedUrl);
       if (youtubeId) {
         setActive({ ...item, youtubeId });
       } else {

@@ -8,7 +8,7 @@ import { LogoAdSlot } from "@/components/layout/LogoAdSlot";
 import { MobileMenu } from "@/components/layout/MobileMenu";
 import { SearchOverlay } from "@/components/shared/SearchOverlay";
 import { InstagramIcon, XIcon, YoutubeIcon } from "@/components/shared/SocialIcons";
-import type { Article, Category } from "@/lib/types";
+import type { Ad, Article, Category } from "@/lib/types";
 
 type HeaderProps = {
   staticCategories: Category[];
@@ -17,6 +17,7 @@ type HeaderProps = {
   currentDate: string;
   currentDateFormatted: string;
   social: { youtube: string; instagram: string; x: string };
+  navAd?: Ad;
   className?: string;
 };
 
@@ -27,6 +28,7 @@ export function Header({
   currentDate,
   currentDateFormatted,
   social,
+  navAd,
   className = "",
 }: HeaderProps) {
   const [searchOpen, setSearchOpen] = useState(false);
@@ -44,7 +46,7 @@ export function Header({
     >
       <div className="hidden bg-white lg:block">
         <div className="mx-auto flex max-w-6xl justify-start px-3 py-3">
-          <LogoAdSlot />
+          <LogoAdSlot ad={navAd} />
         </div>
       </div>
 
@@ -60,7 +62,7 @@ export function Header({
           </button>
 
           <div className="flex flex-1 justify-center lg:hidden">
-            <LogoAdSlot compact />
+            <LogoAdSlot compact ad={navAd} />
           </div>
 
           <nav className="hidden min-w-0 flex-1 items-center justify-center gap-0.5 lg:flex">

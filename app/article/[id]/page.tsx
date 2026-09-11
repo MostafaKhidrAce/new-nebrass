@@ -35,7 +35,7 @@ export default async function ArticlePage({ params }: PageProps<"/article/[id]">
   const { article, related, topAd, bottomAd } = data;
   const category = await getCategoryBySlug(article.category);
   const isEnglish = category?.locale === "en" || article.lang === "en";
-  const youtubeId = youtubeIdFromUrl(article.videoUrl);
+  const youtubeId = article.youtubeId || youtubeIdFromUrl(article.videoUrl) || youtubeIdFromUrl(article.embedUrl);
 
   return (
     <article

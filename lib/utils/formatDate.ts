@@ -50,11 +50,10 @@ export function displayArticleDate(
   article: { date: string; dateFormatted?: string; lang?: "ar" | "en" },
   category?: { locale?: "ar" | "en" },
 ): string {
-  if (contentLocale(article, category) === "en") {
-    return formatEnglishDate(article.date);
-  }
   if (article.dateFormatted) return article.dateFormatted;
-  return formatArabicDate(article.date);
+  return contentLocale(article, category) === "en"
+    ? formatEnglishDate(article.date)
+    : formatArabicDate(article.date);
 }
 
 /** Local calendar date as YYYY-MM-DD, matching the reference utility bar. */

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { RemoteImage } from "@/components/shared/RemoteImage";
 import Link from "next/link";
 import { CameraIcon } from "@/components/shared/CameraIcon";
 
@@ -24,7 +24,7 @@ function CardFace({
 }: Pick<OverlayMediaCardProps, "src" | "alt" | "title" | "priority" | "sizes" | "className">) {
   return (
     <span className={`group relative block w-full overflow-hidden ${className ?? "aspect-[4/3]"}`}>
-      <Image
+      <RemoteImage
         src={src}
         alt={alt}
         fill

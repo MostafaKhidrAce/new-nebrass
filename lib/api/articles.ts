@@ -1,8 +1,7 @@
 import { cache } from "react";
 import { ApiError, apiGet } from "@/lib/api/http";
-import { isNewsArticleSlug, mapAd, mapArticleCard, mapArticleDetail, mapCategory } from "@/lib/api/mappers";
+import { mapAd, mapArticleCard, mapArticleDetail, mapCategory, normalizeSlug } from "@/lib/api/mappers";
 import { getApiCategories } from "@/lib/api/categories";
-import { NEWS_ARTICLES } from "@/lib/api/news";
 import type {
   ApiAd,
   ApiArticleCard,
@@ -15,33 +14,14 @@ import type {
   SearchResult,
 } from "@/lib/types";
 
-function byDateDesc(a: Article, b: Article) {
-  return new Date(b.date).getTime() - new Date(a.date).getTime();
-}
-
-export async function getArticlesByCategory(
-  slug: string,
-  page = 1,
-  pageSize = 12,
-): Promise<PaginatedArticles> {
-  if (slug === "news") {
-    const start = (page - 1) * pageSize;
-    const items = NEWS_ARTICLES.slice(start, start + pageSize);
-    return {
-      items,
-      page,
-      pageSize,
-      total: NEWS_ARTICLES.length,
-      hasMore: start + items.length < NEWS_ARTICLES.length,
-    };
-  }
-
+export async function getArticlesByCategory(slug: string, page = 1): Promise<PaginatedArticles> {
+  const pathSlug = encodeURIComponent(normalizeSlug(slug));
   const json = await apiGet<{
     data: ApiArticleCard[];
     meta: LaravelPagination;
     category: ApiCategoryRef;
     banner_ad: ApiAd | null;
-  }>(`/categories/${encodeURIComponent(slug)}?page=${page}`);
+  }>(`/categories/${pathSlug}?page=${page}`);
 
   return {
     items: json.data.map((card) => mapArticleCard(card)),
@@ -52,21 +32,18 @@ export async function getArticlesByCategory(
   };
 }
 
-export async function getCategoryPage(slug: string, page = 1) {
-  if (slug === "news") {
-    const listing = await getArticlesByCategory(slug, page);
-    return { ...listing, bannerAd: undefined };
-  }
-
+async function fetchCategoryPage(slug: string, page = 1) {
+  const pathSlug = encodeURIComponent(normalizeSlug(slug));
   try {
     const json = await apiGet<{
       data: ApiArticleCard[];
       meta: LaravelPagination;
       category: ApiCategoryRef;
       banner_ad: ApiAd | null;
-    }>(`/categories/${encodeURIComponent(slug)}?page=${page}`);
+    }>(`/categories/${pathSlug}?page=${page}`);
 
     return {
+      category: mapCategory(json.category),
       items: json.data.map((card) => mapArticleCard(card)),
       page: json.meta.current_page,
       pageSize: json.meta.per_page,
@@ -80,16 +57,9 @@ export async function getCategoryPage(slug: string, page = 1) {
   }
 }
 
-async function fetchArticlePage(slug: string): Promise<ArticlePageData | undefined> {
-  if (isNewsArticleSlug(slug)) {
-    const article = NEWS_ARTICLES.find((item) => item.id === slug);
-    if (!article) return undefined;
-    return {
-      article,
-      related: NEWS_ARTICLES.filter((item) => item.id !== slug).slice(0, 4),
-    };
-  }
+export const getCategoryPage = cache(fetchCategoryPage);
 
+async function fetchArticlePage(slug: string): Promise<ArticlePageData | undefined> {
   try {
     const json = await apiGet<{
       data: {
@@ -98,7 +68,7 @@ async function fetchArticlePage(slug: string): Promise<ArticlePageData | undefin
         article_top_ad: ApiAd | null;
         article_bottom_ad: ApiAd | null;
       };
-    }>(`/articles/${encodeURIComponent(slug)}`, { cache: "no-store" });
+    }>(`/articles/${encodeURIComponent(normalizeSlug(slug))}`, { cache: "no-store" });
 
     return {
       article: mapArticleDetail(json.data.article),
@@ -124,13 +94,12 @@ export async function getArticleById(id: string): Promise<Article | undefined> {
 }
 
 export async function getLatestByCategory(slug: string, limit = 3): Promise<Article[]> {
-  if (slug === "news") return NEWS_ARTICLES.slice(0, limit);
-  const page = await getArticlesByCategory(slug, 1, limit);
+  const page = await getArticlesByCategory(slug, 1);
   return page.items.slice(0, limit);
 }
 
 export async function getRelatedArticles(id: string, limit = 4): Promise<Article[]> {
-  const data = await fetchArticlePage(id);
+  const data = await getArticlePage(id);
   return data?.related.slice(0, limit) ?? [];
 }
 
@@ -138,23 +107,24 @@ export async function searchArticles(query: string): Promise<SearchResult> {
   const q = query.trim();
   if (!q) return { items: [], categories: [], query: "" };
 
-  const json = await apiGet<{
-    data: ApiArticleCard[];
-    query: string;
-    categories: ApiCategoryRef[];
-  }>(`/search?q=${encodeURIComponent(q)}`);
+  try {
+    const json = await apiGet<{
+      data: ApiArticleCard[];
+      query: string;
+      categories: ApiCategoryRef[];
+    }>(`/search?q=${encodeURIComponent(q)}`);
 
-  const newsHits = NEWS_ARTICLES.filter(
-    (article) =>
-      article.title.toLowerCase().includes(q.toLowerCase()) ||
-      article.excerpt.toLowerCase().includes(q.toLowerCase()),
-  ).sort(byDateDesc);
-
-  return {
-    query: json.query,
-    items: [...json.data.map((card) => mapArticleCard(card)), ...newsHits],
-    categories: json.categories.map(mapCategory),
-  };
+    return {
+      query: json.query,
+      items: json.data.map((card) => mapArticleCard(card)),
+      categories: json.categories.map(mapCategory),
+    };
+  } catch (error) {
+    if (error instanceof ApiError && (error.status === 422 || error.status === 404)) {
+      return { items: [], categories: [], query: q };
+    }
+    throw error;
+  }
 }
 
 export async function getSitemapArticles(): Promise<Article[]> {
@@ -165,6 +135,5 @@ export async function getSitemapArticles(): Promise<Article[]> {
       unique.set(card.slug, mapArticleCard(card));
     }
   }
-  for (const article of NEWS_ARTICLES) unique.set(article.id, article);
   return [...unique.values()];
 }
