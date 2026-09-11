@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { CategoryBadge } from "@/components/shared/CategoryBadge";
 import type { Article, Category } from "@/lib/types";
-import { formatArticleDate } from "@/lib/utils/formatDate";
+import { displayArticleDate } from "@/lib/utils/formatDate";
 
 type ArticleHeaderProps = {
   article: Article;
@@ -41,7 +41,7 @@ export function ArticleHeader({ article, category }: ArticleHeaderProps) {
       </div>
       <div className="mt-3 flex flex-wrap items-center gap-2">
         {category && <CategoryBadge name={category.name} accent={category.accent} href={category.href} />}
-        <time className="text-xs text-muted">{formatArticleDate(article.date, article, category)}</time>
+        <time className="text-xs text-muted">{displayArticleDate(article, category)}</time>
       </div>
       <h1 className="mt-2 text-2xl font-extrabold leading-snug text-navy md:text-3xl">{article.title}</h1>
     </header>

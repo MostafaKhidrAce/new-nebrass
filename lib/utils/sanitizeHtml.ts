@@ -2,11 +2,16 @@ import sanitizeHtmlLib from "sanitize-html";
 
 const ALLOWED_TAGS = [
   "p",
+  "h1",
   "h2",
   "h3",
+  "h4",
   "blockquote",
   "strong",
   "em",
+  "u",
+  "span",
+  "div",
   "ul",
   "ol",
   "li",

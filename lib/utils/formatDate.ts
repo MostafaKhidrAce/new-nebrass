@@ -46,6 +46,17 @@ export function formatArticleDate(
     : formatArabicDate(isoDate);
 }
 
+export function displayArticleDate(
+  article: { date: string; dateFormatted?: string; lang?: "ar" | "en" },
+  category?: { locale?: "ar" | "en" },
+): string {
+  if (contentLocale(article, category) === "en") {
+    return formatEnglishDate(article.date);
+  }
+  if (article.dateFormatted) return article.dateFormatted;
+  return formatArabicDate(article.date);
+}
+
 /** Local calendar date as YYYY-MM-DD, matching the reference utility bar. */
 export function formatIsoDate(date: Date = new Date()): string {
   const year = date.getFullYear();

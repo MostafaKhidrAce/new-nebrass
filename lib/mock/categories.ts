@@ -61,6 +61,7 @@ const ACCENT_CLASS: Record<string, string> = {
   reports: "bg-accent-reports",
   sports: "bg-accent-sports",
   misc: "bg-accent-misc",
+  variety: "bg-accent-misc",
   women: "bg-accent-women",
   society: "bg-accent-society",
   culture: "bg-accent-culture",

@@ -1,11 +1,26 @@
-import { ADS } from "@/lib/mock/ads";
-import type { Ad, AdPlacement } from "@/lib/types";
+import { apiGet } from "@/lib/api/http";
+import { getHome } from "@/lib/api/home";
+import { mapAd } from "@/lib/api/mappers";
+import type { Ad, AdPlacement, ApiAd } from "@/lib/types";
 
-/** Swap this body for a real fetch later. */
+const API_PLACEMENT: Record<AdPlacement, string> = {
+  "home-top": "home_hero",
+  section: "home_mid",
+  "article-in-content": "article_top",
+  "article-bottom": "article_bottom",
+};
+
 export async function getAds(placement: AdPlacement): Promise<Ad[]> {
-  return ADS.filter((ad) => ad.placement === placement);
+  if (placement === "home-top") {
+    const home = await getHome();
+    return home.hero_ads.slice(0, 3).map(mapAd);
+  }
+
+  const json = await apiGet<{ data: ApiAd[] }>(`/ads?placement=${API_PLACEMENT[placement]}`);
+  return json.data.map(mapAd);
 }
 
 export async function getAd(placement: AdPlacement): Promise<Ad | undefined> {
-  return ADS.find((ad) => ad.placement === placement);
+  const ads = await getAds(placement);
+  return ads[0];
 }

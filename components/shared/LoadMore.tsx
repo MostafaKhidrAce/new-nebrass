@@ -22,11 +22,14 @@ export function LoadMoreGrid({ slug, initialItems, initialHasMore, category, ad 
 
   async function loadMore() {
     setLoading(true);
-    const next = await getArticlesByCategory(slug, page + 1);
-    setItems((current) => [...current, ...next.items]);
-    setPage((current) => current + 1);
-    setHasMore(next.hasMore);
-    setLoading(false);
+    try {
+      const next = await getArticlesByCategory(slug, page + 1);
+      setItems((current) => [...current, ...next.items]);
+      setPage((current) => current + 1);
+      setHasMore(next.hasMore);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (

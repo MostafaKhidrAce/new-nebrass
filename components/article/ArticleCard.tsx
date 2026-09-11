@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CategoryBadge } from "@/components/shared/CategoryBadge";
 import type { Article, Category } from "@/lib/types";
-import { formatArticleDate } from "@/lib/utils/formatDate";
+import { displayArticleDate } from "@/lib/utils/formatDate";
 
 type ArticleCardProps = {
   article: Article;
@@ -18,7 +18,7 @@ export function ArticleCard({
   priority = false,
 }: ArticleCardProps) {
   const href = `/article/${article.id}`;
-  const dateLabel = formatArticleDate(article.date, article, category);
+  const dateLabel = displayArticleDate(article, category);
 
 
   if (variant === "mega") {

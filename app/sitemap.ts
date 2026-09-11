@@ -1,10 +1,10 @@
 import type { MetadataRoute } from "next";
-import { getAllArticles } from "@/lib/api/articles";
+import { getSitemapArticles } from "@/lib/api/articles";
 import { getAllCategories } from "@/lib/api/categories";
 import { SITE_URL } from "@/lib/config";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [articles, categories] = await Promise.all([getAllArticles(), getAllCategories()]);
+  const [articles, categories] = await Promise.all([getSitemapArticles(), getAllCategories()]);
 
   const categoryUrls = categories
     .filter((category) => category.slug !== "home" && category.slug !== "media")

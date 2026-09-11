@@ -1,8 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 import { OverlayMediaCard } from "@/components/shared/OverlayMediaCard";
+import { getArticleBySlug } from "@/lib/api/articles";
+import { youtubeIdFromUrl } from "@/lib/api/mappers";
 import type { MediaItem } from "@/lib/types";
 
 type MediaSectionProps = {
@@ -11,7 +14,26 @@ type MediaSectionProps = {
 };
 
 export function MediaSection({ items, title = "الوسائط" }: MediaSectionProps) {
+  const router = useRouter();
   const [active, setActive] = useState<MediaItem | null>(null);
+  const [opening, setOpening] = useState<string | null>(null);
+
+  async function openItem(item: MediaItem) {
+    setOpening(item.id);
+    try {
+      const article = await getArticleBySlug(item.id);
+      const youtubeId = youtubeIdFromUrl(article?.videoUrl);
+      if (youtubeId) {
+        setActive({ ...item, youtubeId });
+      } else {
+        router.push(`/article/${item.id}`);
+      }
+    } catch {
+      router.push(`/article/${item.id}`);
+    } finally {
+      setOpening(null);
+    }
+  }
 
   return (
     <section className="mt-7">
@@ -27,14 +49,17 @@ export function MediaSection({ items, title = "الوسائط" }: MediaSectionPr
             src={item.thumbnail}
             alt={item.title}
             title={item.title}
-            onClick={() => setActive(item)}
+            onClick={() => {
+              if (opening) return;
+              void openItem(item);
+            }}
             className="h-[240px] sm:h-[280px] md:h-[300px]"
             sizes="(max-width: 768px) 100vw, 33vw"
           />
         ))}
       </div>
 
-      {active && (
+      {active?.youtubeId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-chrome/80 p-4" role="dialog" aria-modal>
           <div className="w-full max-w-3xl overflow-hidden bg-black">
             <div className="flex items-center justify-between bg-chrome px-3 py-2 text-white">

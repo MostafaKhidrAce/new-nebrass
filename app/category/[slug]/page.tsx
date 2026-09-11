@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { LoadMoreGrid } from "@/components/shared/LoadMore";
-import { getAd } from "@/lib/api/ads";
-import { getArticlesByCategory } from "@/lib/api/articles";
+import { getCategoryPage } from "@/lib/api/articles";
 import { getAllCategories, getCategoryBySlug } from "@/lib/api/categories";
 import { getAccentClass } from "@/lib/mock/categories";
 import { absoluteUrl } from "@/lib/seo";
@@ -50,15 +49,13 @@ export default async function CategoryPage({ params }: PageProps<"/category/[slu
 
   if (slug === "home") redirect("/");
   if (slug === "media") redirect("/media");
+  if (slug === "misc") redirect("/category/variety");
 
   const category = await getCategoryBySlug(slug);
   if (!category) notFound();
 
-  const [page, sectionAd] = await Promise.all([
-    getArticlesByCategory(slug, 1),
-    getAd("section"),
-  ]);
-
+  const page = await getCategoryPage(slug, 1);
+  if (!page) notFound();
   const isEnglish = category.locale === "en";
 
   return (
@@ -75,7 +72,7 @@ export default async function CategoryPage({ params }: PageProps<"/category/[slu
         initialItems={page.items}
         initialHasMore={page.hasMore}
         category={category}
-        ad={sectionAd}
+        ad={page.bannerAd}
       />
     </div>
   );

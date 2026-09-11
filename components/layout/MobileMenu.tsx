@@ -72,6 +72,8 @@ export function MobileMenu({ open, onClose, staticCategories, dynamicCategories 
               {category.name}
             </Link>
           ))}
+          {dynamicCategories.length > 0 && (
+            <>
           <button
             type="button"
             onClick={() => setMoreOpen((value) => !value)}
@@ -93,6 +95,8 @@ export function MobileMenu({ open, onClose, staticCategories, dynamicCategories 
                 </Link>
               ))}
             </div>
+          )}
+            </>
           )}
         </nav>
       </aside>

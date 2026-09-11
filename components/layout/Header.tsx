@@ -8,18 +8,27 @@ import { LogoAdSlot } from "@/components/layout/LogoAdSlot";
 import { MobileMenu } from "@/components/layout/MobileMenu";
 import { SearchOverlay } from "@/components/shared/SearchOverlay";
 import { InstagramIcon, XIcon, YoutubeIcon } from "@/components/shared/SocialIcons";
-import { SOCIAL_LINKS } from "@/lib/config";
 import type { Article, Category } from "@/lib/types";
-import { formatIsoDate } from "@/lib/utils/formatDate";
 
 type HeaderProps = {
   staticCategories: Category[];
   dynamicCategories: Category[];
   megaMenu: Record<string, Article[]>;
+  currentDate: string;
+  currentDateFormatted: string;
+  social: { youtube: string; instagram: string; x: string };
   className?: string;
 };
 
-export function Header({ staticCategories, dynamicCategories, megaMenu, className = "" }: HeaderProps) {
+export function Header({
+  staticCategories,
+  dynamicCategories,
+  megaMenu,
+  currentDate,
+  currentDateFormatted,
+  social,
+  className = "",
+}: HeaderProps) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
@@ -27,7 +36,6 @@ export function Header({ staticCategories, dynamicCategories, megaMenu, classNam
   const hoveredCategory = staticCategories.find((category) => category.slug === hoveredSlug);
   const hoveredArticles = hoveredSlug ? (megaMenu[hoveredSlug] ?? []) : [];
   const showMegaPanel = Boolean(hoveredCategory && hoveredArticles.length > 0);
-  const today = formatIsoDate();
 
   return (
     <header
@@ -73,6 +81,7 @@ export function Header({ staticCategories, dynamicCategories, megaMenu, classNam
                 </Link>
               );
             })}
+            {dynamicCategories.length > 0 && (
             <div className="group relative" onMouseEnter={() => setHoveredSlug(null)}>
               <button
                 type="button"
@@ -95,6 +104,7 @@ export function Header({ staticCategories, dynamicCategories, megaMenu, classNam
                 </div>
               </div>
             </div>
+            )}
           </nav>
 
           <button
@@ -110,8 +120,8 @@ export function Header({ staticCategories, dynamicCategories, megaMenu, classNam
 
       <div className="bg-black text-white">
         <div className="mx-auto flex h-9 max-w-6xl items-center justify-between px-3">
-          <time dateTime={today} className="text-[13px] font-semibold tracking-wide text-mustard" suppressHydrationWarning>
-            {today}
+          <time dateTime={currentDate} className="text-[13px] font-semibold tracking-wide text-mustard">
+            {currentDateFormatted}
           </time>
           <div className="flex items-center gap-3.5" dir="ltr">
             <button
@@ -122,13 +132,13 @@ export function Header({ staticCategories, dynamicCategories, megaMenu, classNam
             >
               <Search className="h-4 w-4" />
             </button>
-            <a href={SOCIAL_LINKS.youtube} aria-label="يوتيوب" className="text-white opacity-90 hover:opacity-100">
+            <a href={social.youtube} aria-label="يوتيوب" className="text-white opacity-90 hover:opacity-100">
               <YoutubeIcon className="h-4 w-4" />
             </a>
-            <a href={SOCIAL_LINKS.instagram} aria-label="إنستغرام" className="text-white opacity-90 hover:opacity-100">
+            <a href={social.instagram} aria-label="إنستغرام" className="text-white opacity-90 hover:opacity-100">
               <InstagramIcon className="h-4 w-4" />
             </a>
-            <a href={SOCIAL_LINKS.twitter} aria-label="إكس" className="text-white opacity-90 hover:opacity-100">
+            <a href={social.x} aria-label="إكس" className="text-white opacity-90 hover:opacity-100">
               <XIcon className="h-4 w-4" />
             </a>
           </div>

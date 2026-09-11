@@ -8,9 +8,7 @@ import { Search, X } from "lucide-react";
 import { CategoryBadge } from "@/components/shared/CategoryBadge";
 import { searchArticles } from "@/lib/api/articles";
 import type { Article, Category } from "@/lib/types";
-import { formatArticleDate } from "@/lib/utils/formatDate";
-
-const SUGGESTIONS = ["الرياض", "الرياضة", "العلا", "التقنية", "المرأة", "المناخ"];
+import { displayArticleDate } from "@/lib/utils/formatDate";
 
 type SearchOverlayProps = {
   onClose: () => void;
@@ -22,6 +20,11 @@ export function SearchOverlay({ onClose, categories }: SearchOverlayProps) {
   const titleId = useId();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Article[]>([]);
+  const [matchedCategories, setMatchedCategories] = useState<Category[]>([]);
+
+  const suggestionCategories = categories.filter(
+    (category) => category.slug !== "home" && category.kind === "static",
+  );
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
@@ -34,8 +37,19 @@ export function SearchOverlay({ onClose, categories }: SearchOverlayProps) {
 
   async function handleQueryChange(value: string) {
     setQuery(value);
-    const items = await searchArticles(value);
-    setResults(items.slice(0, 8));
+    if (!value.trim()) {
+      setResults([]);
+      setMatchedCategories([]);
+      return;
+    }
+    try {
+      const payload = await searchArticles(value);
+      setResults(payload.items.slice(0, 8));
+      setMatchedCategories(payload.categories);
+    } catch {
+      setResults([]);
+      setMatchedCategories([]);
+    }
   }
 
   function goToResults(value: string) {
@@ -46,6 +60,7 @@ export function SearchOverlay({ onClose, categories }: SearchOverlayProps) {
   }
 
   const categoryOf = (slug: string) => categories.find((item) => item.slug === slug);
+  const pills = query.trim() && matchedCategories.length > 0 ? matchedCategories : suggestionCategories;
 
   return (
     <div
@@ -87,22 +102,26 @@ export function SearchOverlay({ onClose, categories }: SearchOverlayProps) {
         </div>
 
         <div className="max-h-[70vh] overflow-y-auto px-4 py-3">
-          {!query.trim() && (
-            <div>
-              <p className="mb-2 text-xs font-semibold text-muted">اقتراحات للبحث</p>
+          {pills.length > 0 && (
+            <div className={query.trim() && results.length > 0 ? "mb-3" : undefined}>
+              <p className="mb-2 text-xs font-semibold text-muted">
+                {query.trim() && matchedCategories.length > 0 ? "أقسام مطابقة" : "اقتراحات للبحث"}
+              </p>
               <div className="flex flex-wrap gap-2">
-                {SUGGESTIONS.map((term) => (
+                {pills.map((category) => (
                   <button
-                    key={term}
+                    key={category.slug}
                     type="button"
-                    onClick={() => goToResults(term)}
+                    onClick={() => goToResults(category.name)}
                     className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-navy hover:bg-neutral-50"
                   >
-                    {term}
+                    {category.name}
                   </button>
                 ))}
               </div>
-              <p className="mt-4 text-[11px] text-muted">اضغط Enter لعرض كل النتائج، أو Esc للإغلاق</p>
+              {!query.trim() && (
+                <p className="mt-4 text-[11px] text-muted">اضغط Enter لعرض كل النتائج، أو Esc للإغلاق</p>
+              )}
             </div>
           )}
 
@@ -128,7 +147,7 @@ export function SearchOverlay({ onClose, categories }: SearchOverlayProps) {
                         {category && <CategoryBadge name={category.name} accent={category.accent} />}
                         <p className="mt-1 line-clamp-2 text-sm font-bold leading-5 text-navy">{article.title}</p>
                         <time className="mt-0.5 block text-[11px] text-muted">
-                          {formatArticleDate(article.date, article, category)}
+                          {displayArticleDate(article, category)}
                         </time>
                       </div>
                     </Link>

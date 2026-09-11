@@ -3,37 +3,46 @@ import { AdSlot } from "@/components/layout/AdSlot";
 import { CategorySection } from "@/components/home/CategorySection";
 import { HeroSection } from "@/components/home/HeroSection";
 import { MediaSection } from "@/components/home/MediaSection";
-import { getAds } from "@/lib/api/ads";
-import { getArticlesByCategory, getFeaturedArticles } from "@/lib/api/articles";
-import { getAllCategories, getNewsCategory, getStaticNewsCategories } from "@/lib/api/categories";
+import { getArticlesByCategory } from "@/lib/api/articles";
+import { getAllCategories, getNewsCategory } from "@/lib/api/categories";
+import { getHome } from "@/lib/api/home";
+import { mapAd, mapArticleCard, mapCategory } from "@/lib/api/mappers";
 import { getMediaItems } from "@/lib/api/media";
-import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/config";
+import { getSettings } from "@/lib/api/settings";
 
-export const metadata: Metadata = {
-  title: { absolute: SITE_NAME },
-  description: SITE_DESCRIPTION,
-  alternates: { canonical: "/" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSettings();
+  return {
+    title: { absolute: settings.siteName },
+    description: settings.tagline,
+    alternates: { canonical: "/" },
+  };
+}
 
 export default async function HomePage() {
-  const [featured, newsCategories, englishNews, allCategories, media, sectionAds] = await Promise.all([
-    getFeaturedArticles(),
-    getStaticNewsCategories(),
-    getNewsCategory(),
+  const [home, allCategories, media, englishNews] = await Promise.all([
+    getHome(),
     getAllCategories(),
     getMediaItems(),
-    getAds("section"),
+    getNewsCategory(),
   ]);
 
-  const [sections, englishArticles] = await Promise.all([
-    Promise.all(
-      newsCategories.map(async (category) => ({
-        category,
-        articles: (await getArticlesByCategory(category.slug, 1, 8)).items,
-      })),
-    ),
-    getArticlesByCategory(englishNews.slug, 1, 8),
-  ]);
+  const englishArticles = await getArticlesByCategory(englishNews.slug, 1, 8);
+
+  const featured = [
+    ...(home.featured_article ? [mapArticleCard(home.featured_article, { featured: true })] : []),
+    ...home.latest_articles.map((card) => mapArticleCard(card)),
+  ];
+
+  const midAd = home.home_mid_ad ? mapAd(home.home_mid_ad) : undefined;
+  const bottomAd = home.home_bottom_ad ? mapAd(home.home_bottom_ad) : undefined;
+
+  const sections = home.sections
+    .filter((section) => section.category.slug !== "media")
+    .map((section) => ({
+      category: mapCategory(section.category),
+      articles: section.articles.map((card) => mapArticleCard(card)),
+    }));
 
   return (
     <>
@@ -42,14 +51,12 @@ export default async function HomePage() {
 
         {sections.map((section, index) => (
           <div key={section.category.slug} className="space-y-7">
-            {(index === 2 || index === 5) && sectionAds[index === 2 ? 0 : 1] && (
-              <AdSlot ads={[sectionAds[index === 2 ? 0 : 1]]} />
-            )}
+            {index === 2 && midAd && <AdSlot ads={[midAd]} />}
             <CategorySection category={section.category} articles={section.articles} />
           </div>
         ))}
 
-        {sectionAds[2] && <AdSlot ads={[sectionAds[2]]} />}
+        {bottomAd && <AdSlot ads={[bottomAd]} />}
       </div>
       <MediaSection items={media} />
       <div className="mx-auto max-w-6xl px-3 py-5">

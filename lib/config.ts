@@ -1,7 +1,7 @@
-export const SITE_NAME = "أخبار";
-export const SITE_TAGLINE = "تغطية إخبارية يومية";
+export const SITE_NAME = "منارة";
+export const SITE_TAGLINE = "نبض الخبر… من كل الجهات";
 export const SITE_DESCRIPTION =
-  "منصة إخبارية عربية تتابع أبرز التطورات في المملكة والعالم، وتقدّم تقارير عميقة وتغطيات متنوعة في الرياضة والثقافة والمجتمع.";
+  "منارة منصة إخبارية عربية تغطي المملكة والعالم والتقارير والرياضة والمنوعات.";
 export const SITE_URL = "https://manara.example";
 
 export const CONTACT = {
