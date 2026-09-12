@@ -7,14 +7,14 @@ import { getArticlesByCategory } from "@/lib/api/articles";
 import type { Ad, Article, Category } from "@/lib/types";
 
 type LoadMoreGridProps = {
-  slug: string;
+  categoryId: number;
   initialItems: Article[];
   initialHasMore: boolean;
   category?: Category;
   ad?: Ad;
 };
 
-export function LoadMoreGrid({ slug, initialItems, initialHasMore, category, ad }: LoadMoreGridProps) {
+export function LoadMoreGrid({ categoryId, initialItems, initialHasMore, category, ad }: LoadMoreGridProps) {
   const [items, setItems] = useState(initialItems);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(initialHasMore);
@@ -23,7 +23,7 @@ export function LoadMoreGrid({ slug, initialItems, initialHasMore, category, ad 
   async function loadMore() {
     setLoading(true);
     try {
-      const next = await getArticlesByCategory(slug, page + 1);
+      const next = await getArticlesByCategory(categoryId, page + 1);
       setItems((current) => [...current, ...next.items]);
       setPage((current) => current + 1);
       setHasMore(next.hasMore);

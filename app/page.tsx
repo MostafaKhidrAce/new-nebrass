@@ -44,7 +44,7 @@ export default async function HomePage() {
         <HeroSection articles={featured} categories={allCategories} />
 
         {beforeMedia.map((section, index) => (
-          <div key={section.category.slug} className="space-y-7">
+          <div key={section.category.id ?? section.category.slug} className="space-y-7">
             {index === 2 && midAd && <AdSlot ads={[midAd]} />}
             <CategorySection category={section.category} articles={section.articles} />
           </div>

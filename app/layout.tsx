@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Noto_Kufi_Arabic } from "next/font/google";
+import Script from "next/script";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { HomeTopAds } from "@/components/layout/HomeTopAds";
@@ -69,6 +70,15 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         </div>
         <main className="flex-1">{children}</main>
         <Footer staticCategories={staticCategories} settings={settings} />
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-FXGPPG8CYH" strategy="afterInteractive" />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-FXGPPG8CYH');
+          `}
+        </Script>
       </body>
     </html>
   );

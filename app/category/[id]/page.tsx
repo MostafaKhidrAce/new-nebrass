@@ -3,17 +3,39 @@ import { notFound, redirect } from "next/navigation";
 import { AdSlot } from "@/components/layout/AdSlot";
 import { LoadMoreGrid } from "@/components/shared/LoadMore";
 import { getCategoryPage } from "@/lib/api/articles";
+import { getCategoryBySlug } from "@/lib/api/categories";
+import { normalizeSlug, parseCategoryId } from "@/lib/api/mappers";
 import { getAccentClass } from "@/lib/mock/categories";
-import { normalizeSlug } from "@/lib/api/mappers";
 import { absoluteUrl } from "@/lib/seo";
 
 export const dynamicParams = true;
 
-export async function generateMetadata({
-  params,
-}: PageProps<"/category/[slug]">): Promise<Metadata> {
-  const { slug } = await params;
-  const page = await getCategoryPage(normalizeSlug(slug), 1);
+type CategoryRouteProps = {
+  params: Promise<{ id: string }>;
+};
+
+async function resolveCategoryPage(param: string) {
+  const numericId = parseCategoryId(param);
+  if (numericId) {
+    const page = await getCategoryPage(numericId, 1);
+    if (!page) return undefined;
+    if (page.category.slug === "media") redirect("/media");
+    return page;
+  }
+
+  const normalized = normalizeSlug(param);
+  if (normalized === "home") redirect("/");
+
+  const slug = normalized === "misc" ? "variety" : normalized;
+  const listed = await getCategoryBySlug(slug);
+  if (listed?.slug === "media") redirect("/media");
+  if (listed?.id) redirect(`/category/${listed.id}`);
+  return undefined;
+}
+
+export async function generateMetadata({ params }: CategoryRouteProps): Promise<Metadata> {
+  const { id } = await params;
+  const page = await resolveCategoryPage(id);
   if (!page) return { title: "القسم غير موجود", robots: { index: false } };
   const { category } = page;
   const isEnglish = category.locale === "en";
@@ -41,17 +63,13 @@ export async function generateMetadata({
   };
 }
 
-export default async function CategoryPage({ params }: PageProps<"/category/[slug]">) {
-  const { slug } = await params;
-  const normalized = normalizeSlug(slug);
-
-  if (normalized === "home") redirect("/");
-  if (normalized === "media") redirect("/media");
-  if (normalized === "misc") redirect("/category/variety");
-
-  const page = await getCategoryPage(normalized, 1);
+export default async function CategoryPage({ params }: CategoryRouteProps) {
+  const { id } = await params;
+  const page = await resolveCategoryPage(id);
   if (!page) notFound();
   const { category } = page;
+  const categoryId = category.id;
+  if (categoryId == null) notFound();
   const isEnglish = category.locale === "en";
 
   return (
@@ -70,7 +88,7 @@ export default async function CategoryPage({ params }: PageProps<"/category/[slu
         </p>
       ) : (
         <LoadMoreGrid
-          slug={category.slug}
+          categoryId={categoryId}
           initialItems={page.items}
           initialHasMore={page.hasMore}
           category={category}

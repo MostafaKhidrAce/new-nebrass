@@ -14,14 +14,13 @@ import type {
   SearchResult,
 } from "@/lib/types";
 
-export async function getArticlesByCategory(slug: string, page = 1): Promise<PaginatedArticles> {
-  const pathSlug = encodeURIComponent(normalizeSlug(slug));
+export async function getArticlesByCategory(categoryId: number, page = 1): Promise<PaginatedArticles> {
   const json = await apiGet<{
     data: ApiArticleCard[];
     meta: LaravelPagination;
     category: ApiCategoryRef;
     banner_ad: ApiAd | null;
-  }>(`/categories/${pathSlug}?page=${page}`);
+  }>(`/categories/${categoryId}?page=${page}`);
 
   return {
     items: json.data.map((card) => mapArticleCard(card)),
@@ -32,15 +31,14 @@ export async function getArticlesByCategory(slug: string, page = 1): Promise<Pag
   };
 }
 
-async function fetchCategoryPage(slug: string, page = 1) {
-  const pathSlug = encodeURIComponent(normalizeSlug(slug));
+async function fetchCategoryPage(categoryId: number, page = 1) {
   try {
     const json = await apiGet<{
       data: ApiArticleCard[];
       meta: LaravelPagination;
       category: ApiCategoryRef;
       banner_ad: ApiAd | null;
-    }>(`/categories/${pathSlug}?page=${page}`);
+    }>(`/categories/${categoryId}?page=${page}`);
 
     return {
       category: mapCategory(json.category),
@@ -93,8 +91,8 @@ export async function getArticleById(id: string): Promise<Article | undefined> {
   return getArticleBySlug(id);
 }
 
-export async function getLatestByCategory(slug: string, limit = 3): Promise<Article[]> {
-  const page = await getArticlesByCategory(slug, 1);
+export async function getLatestByCategory(categoryId: number, limit = 3): Promise<Article[]> {
+  const page = await getArticlesByCategory(categoryId, 1);
   return page.items.slice(0, limit);
 }
 

@@ -72,7 +72,7 @@ export function Header({
 
               return (
                 <Link
-                  key={category.slug}
+                  key={category.id ?? category.slug}
                   href={category.href}
                   onMouseEnter={() => setHoveredSlug(hasMega ? category.slug : null)}
                   className={`rounded px-2 py-1.5 text-[13px] font-bold hover:opacity-70 ${
@@ -96,7 +96,7 @@ export function Header({
                 <div className="rounded-md border border-border bg-white py-1.5 text-navy shadow-lg">
                   {dynamicCategories.map((category) => (
                     <Link
-                      key={category.slug}
+                      key={category.id ?? category.slug}
                       href={category.href}
                       className="block px-4 py-2 text-sm font-semibold hover:bg-neutral-50 hover:underline"
                     >

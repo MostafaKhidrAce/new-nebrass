@@ -52,7 +52,7 @@ export function Footer({ staticCategories, settings }: FooterProps) {
           <h3 className="mb-3 text-sm font-bold text-white">الأقسام</h3>
           <ul className="space-y-1.5 text-xs text-white/80">
             {staticCategories.map((category) => (
-              <li key={category.slug}>
+              <li key={category.id ?? category.slug}>
                 <Link href={category.href} className="hover:opacity-70">
                   {category.name}
                 </Link>
@@ -96,7 +96,7 @@ export function Footer({ staticCategories, settings }: FooterProps) {
       <div className="border-t border-white/10">
         <nav className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-4 gap-y-1 px-3 py-2 text-[11px] text-white/70">
           {staticCategories.map((category) => (
-            <Link key={category.slug} href={category.href} className="hover:opacity-70">
+            <Link key={category.id ?? category.slug} href={category.href} className="hover:opacity-70">
               {category.name}
             </Link>
           ))}

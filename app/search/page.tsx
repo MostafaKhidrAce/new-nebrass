@@ -30,7 +30,7 @@ export default async function SearchPage({ searchParams }: PageProps<"/search">)
           <div className="flex flex-wrap gap-2">
             {result.categories.map((category) => (
               <Link
-                key={category.slug}
+                key={category.id ?? category.slug}
                 href={category.href}
                 className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-navy hover:bg-neutral-50"
               >
@@ -50,7 +50,10 @@ export default async function SearchPage({ searchParams }: PageProps<"/search">)
             <ArticleCard
               key={article.id}
               article={article}
-              category={categories.find((item) => item.slug === article.category)}
+              category={
+                categories.find((item) => item.id === article.categoryId) ??
+                categories.find((item) => item.slug === article.category)
+              }
             />
           ))}
         </div>

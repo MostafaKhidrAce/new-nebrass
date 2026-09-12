@@ -7,7 +7,7 @@ import { RelatedArticles } from "@/components/article/RelatedArticles";
 import { ShareButtons } from "@/components/article/ShareButtons";
 import { AdSlot } from "@/components/layout/AdSlot";
 import { getArticlePage } from "@/lib/api/articles";
-import { getCategoryBySlug } from "@/lib/api/categories";
+import { getCategoryById, getCategoryBySlug } from "@/lib/api/categories";
 import { youtubeIdFromUrl } from "@/lib/api/mappers";
 import { articleJsonLd, articleMetadata } from "@/lib/seo";
 
@@ -17,7 +17,9 @@ export async function generateMetadata({
   const { id } = await params;
   const data = await getArticlePage(id);
   if (!data) return { title: "المادة غير موجودة", robots: { index: false } };
-  const category = await getCategoryBySlug(data.article.category);
+  const category = data.article.categoryId
+    ? await getCategoryById(data.article.categoryId)
+    : await getCategoryBySlug(data.article.category);
   const isEnglish = category?.locale === "en" || data.article.lang === "en";
   return {
     ...articleMetadata(data.article, category?.name, isEnglish),
@@ -33,7 +35,9 @@ export default async function ArticlePage({ params }: PageProps<"/article/[id]">
   if (!data) notFound();
 
   const { article, related, topAd, bottomAd } = data;
-  const category = await getCategoryBySlug(article.category);
+  const category = article.categoryId
+    ? await getCategoryById(article.categoryId)
+    : await getCategoryBySlug(article.category);
   const isEnglish = category?.locale === "en" || article.lang === "en";
   const youtubeId = article.youtubeId || youtubeIdFromUrl(article.videoUrl) || youtubeIdFromUrl(article.embedUrl);
 

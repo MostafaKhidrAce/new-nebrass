@@ -6,6 +6,7 @@ export interface Article {
   title: string;
   description: string;
   category: string;
+  categoryId?: number;
   date: string;
   dateFormatted?: string;
   excerpt: string;
@@ -19,6 +20,7 @@ export interface Article {
 }
 
 export interface Category {
+  id?: number;
   slug: string;
   name: string;
   kind: "static" | "dynamic";
@@ -118,7 +120,13 @@ export interface ApiAd {
   caption_html: string | null;
   sort_order: number;
   external_url: string | null;
-  article: { id: number; title: string; slug: string; category_slug: string } | null;
+  article: {
+    id: number;
+    title: string;
+    slug: string;
+    category_id?: number;
+    category_slug?: string;
+  } | null;
 }
 
 export interface ApiArticleDetail extends ApiArticleCard {

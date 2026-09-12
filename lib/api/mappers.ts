@@ -30,9 +30,17 @@ const AD_PLACEMENT: Record<string, AdPlacement> = {
   nav: "nav",
 };
 
-export function categoryHref(slug: string): string {
-  if (slug === "media") return "/media";
-  return `/category/${slug}`;
+export function categoryHref(category: { id?: number; slug: string }): string {
+  if (category.slug === "media") return "/media";
+  if (category.slug === "home" || category.id == null) return "/";
+  return `/category/${category.id}`;
+}
+
+export function parseCategoryId(value: string): number | null {
+  const trimmed = value.trim();
+  if (!/^\d+$/.test(trimmed)) return null;
+  const id = Number(trimmed);
+  return id > 0 ? id : null;
 }
 
 /** Decode route params that may arrive percent-encoded (Arabic CMS slugs). */
@@ -61,11 +69,12 @@ export function isEnglishCategory(slug: string): boolean {
 
 export function mapCategory(category: ApiCategoryRef): Category {
   return {
+    id: category.id,
     slug: category.slug,
     name: category.name,
     kind: category.is_system ? "static" : "dynamic",
     accent: accentForSlug(category.slug),
-    href: categoryHref(category.slug),
+    href: categoryHref(category),
     locale: isEnglishCategory(category.slug) ? "en" : undefined,
   };
 }
@@ -97,6 +106,7 @@ export function mapArticleCard(card: ApiArticleCard, extra?: Partial<Article>): 
     thumbnail: image,
     mainImage: image,
     category: card.category.slug,
+    categoryId: card.category.id,
     date: card.published_at,
     dateFormatted: card.published_at_formatted,
     mediaType: card.media_type,
@@ -118,12 +128,18 @@ export function mapArticleDetail(detail: ApiArticleDetail): Article {
 
 export function mapAd(ad: ApiAd): Ad {
   const title = stripHtml(ad.caption_html ?? "");
-  const internalSlug = ad.article?.slug;
+  const articleSlug = ad.article?.slug;
+  const categoryId = ad.article?.category_id;
+  const internalLink = articleSlug
+    ? `/article/${articleSlug}`
+    : categoryId
+      ? `/category/${categoryId}`
+      : "#";
   return {
     id: String(ad.id),
     img: absoluteMediaUrl(ad.image_url),
     linkType: ad.type,
-    link: ad.type === "external" ? (ad.external_url ?? "#") : `/article/${internalSlug ?? ""}`,
+    link: ad.type === "external" ? (ad.external_url ?? "#") : internalLink,
     placement: AD_PLACEMENT[ad.placement] ?? "section",
     alt: title || "إعلان",
     title: title || undefined,

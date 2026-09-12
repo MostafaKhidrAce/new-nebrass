@@ -59,7 +59,9 @@ export function SearchOverlay({ onClose, categories }: SearchOverlayProps) {
     onClose();
   }
 
-  const categoryOf = (slug: string) => categories.find((item) => item.slug === slug);
+  const categoryOf = (article: Article) =>
+    categories.find((item) => item.id === article.categoryId) ??
+    categories.find((item) => item.slug === article.category);
   const pills = query.trim() && matchedCategories.length > 0 ? matchedCategories : suggestionCategories;
 
   return (
@@ -109,14 +111,14 @@ export function SearchOverlay({ onClose, categories }: SearchOverlayProps) {
               </p>
               <div className="flex flex-wrap gap-2">
                 {pills.map((category) => (
-                  <button
-                    key={category.slug}
-                    type="button"
-                    onClick={() => goToResults(category.name)}
+                  <Link
+                    key={category.id ?? category.slug}
+                    href={category.href}
+                    onClick={onClose}
                     className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-navy hover:bg-neutral-50"
                   >
                     {category.name}
-                  </button>
+                  </Link>
                 ))}
               </div>
               {!query.trim() && (
@@ -132,7 +134,7 @@ export function SearchOverlay({ onClose, categories }: SearchOverlayProps) {
           {results.length > 0 && (
             <ul className="space-y-1">
               {results.map((article) => {
-                const category = categoryOf(article.category);
+                const category = categoryOf(article);
                 return (
                   <li key={article.id}>
                     <Link

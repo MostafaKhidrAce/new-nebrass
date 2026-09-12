@@ -64,7 +64,7 @@ export function MobileMenu({ open, onClose, staticCategories, dynamicCategories 
         <nav className="flex-1 overflow-y-auto px-2 py-3">
           {staticCategories.map((category) => (
             <Link
-              key={category.slug}
+              key={category.id ?? category.slug}
               href={category.href}
               onClick={onClose}
               className="block rounded px-3 py-2.5 text-sm font-semibold hover:bg-white/10"
@@ -86,7 +86,7 @@ export function MobileMenu({ open, onClose, staticCategories, dynamicCategories 
             <div className="mb-2 space-y-1 border-r border-white/15 pr-2">
               {dynamicCategories.map((category) => (
                 <Link
-                  key={category.slug}
+                  key={category.id ?? category.slug}
                   href={category.href}
                   onClick={onClose}
                   className="block rounded px-3 py-2 text-sm text-white/80 hover:bg-white/10 hover:text-white"
