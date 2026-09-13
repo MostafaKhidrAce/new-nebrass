@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SITE_DESCRIPTION, SITE_URL } from "@/lib/config";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/config";
 import type { Article } from "@/lib/types";
 
 export function absoluteUrl(path = "/"): string {
@@ -70,6 +70,7 @@ export function articleJsonLd(article: Article, categoryName?: string, english =
     articleSection: categoryName,
     publisher: {
       "@type": "NewsMediaOrganization",
+      name: SITE_NAME,
       description: SITE_DESCRIPTION,
       url: SITE_URL,
     },
@@ -79,7 +80,7 @@ export function articleJsonLd(article: Article, categoryName?: string, english =
 export const rootOpenGraph: Metadata["openGraph"] = {
   type: "website",
   locale: "ar_SA",
-  title: "الرئيسية",
+  title: SITE_NAME,
   description: SITE_DESCRIPTION,
   url: SITE_URL,
 };

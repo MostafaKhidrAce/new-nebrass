@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import { Noto_Kufi_Arabic } from "next/font/google";
 import Script from "next/script";
+import type { CSSProperties } from "react";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { HomeTopAds } from "@/components/layout/HomeTopAds";
 import { getAds } from "@/lib/api/ads";
 import { getDynamicCategories, getMegaMenu, getStaticCategories } from "@/lib/api/categories";
+import { getSiteOpacity } from "@/lib/api/opacity";
 import { getSettings } from "@/lib/api/settings";
-import { SITE_DESCRIPTION, SITE_URL } from "@/lib/config";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/config";
 import "./globals.css";
 
 const notoKufi = Noto_Kufi_Arabic({
@@ -19,8 +21,8 @@ const notoKufi = Noto_Kufi_Arabic({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "الرئيسية",
-    template: "%s",
+    default: `${SITE_NAME} | الرئيسية`,
+    template: `${SITE_NAME} | %s`,
   },
   description: SITE_DESCRIPTION,
   keywords: ["أخبار", "المملكة", "العالم", "رياضة", "تقارير"],
@@ -28,13 +30,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "ar_SA",
-    title: "الرئيسية",
+    title: SITE_NAME,
     description: SITE_DESCRIPTION,
     url: SITE_URL,
   },
   twitter: {
     card: "summary_large_image",
-    title: "الرئيسية",
+    title: SITE_NAME,
     description: SITE_DESCRIPTION,
   },
   robots: {
@@ -44,16 +46,23 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const [settings, staticCategories, dynamicCategories, megaMenu, homeTopAds] = await Promise.all([
-    getSettings(),
-    getStaticCategories(),
-    getDynamicCategories(),
-    getMegaMenu(),
-    getAds("home-top"),
-  ]);
+  const [settings, staticCategories, dynamicCategories, megaMenu, homeTopAds, siteOpacity] =
+    await Promise.all([
+      getSettings(),
+      getStaticCategories(),
+      getDynamicCategories(),
+      getMegaMenu(),
+      getAds("home-top"),
+      getSiteOpacity(),
+    ]);
 
   return (
-    <html lang="ar" dir="rtl" className={`${notoKufi.variable} h-full antialiased`}>
+    <html
+      lang="ar"
+      dir="rtl"
+      className={`${notoKufi.variable} h-full antialiased`}
+      style={{ "--site-opacity": String(siteOpacity) } as CSSProperties}
+    >
       <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
         <div className="flex flex-col">
           <Header

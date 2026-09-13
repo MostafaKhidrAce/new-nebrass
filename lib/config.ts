@@ -1,3 +1,4 @@
+export const SITE_NAME = "الجزيرة";
 export const SITE_TAGLINE = "نبض الخبر… من كل الجهات";
 export const SITE_DESCRIPTION =
   "تغطية إخبارية عربية للمملكة والعالم والتقارير والرياضة والمنوعات.";

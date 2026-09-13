@@ -10,7 +10,6 @@ import { getMediaItems } from "@/lib/api/media";
 import { SITE_DESCRIPTION } from "@/lib/config";
 
 export const metadata: Metadata = {
-  title: "الرئيسية",
   description: SITE_DESCRIPTION,
   alternates: { canonical: "/" },
 };

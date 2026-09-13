@@ -1,5 +1,5 @@
 import Link from "next/link";
-// import Image from "next/image";
+import Image from "next/image";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { BackToTop } from "@/components/layout/BackToTop";
 import { LogoAdSlot } from "@/components/layout/LogoAdSlot";
@@ -103,12 +103,19 @@ export function Footer({ staticCategories, settings }: FooterProps) {
         </nav>
       </div>
 
-      <div className="border-t border-white/10">
+      <div className="relative border-t border-white/10">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-3 py-3">
           <p className="text-[11px] text-white/60">© 2026. جميع الحقوق محفوظة</p>
           <BackToTop />
-          {/* <Image src="/logos/Orca-tech logo.svg" alt="" width={80} height={88} className="h-5 w-auto" /> */}
         </div>
+        <Image
+          src="/logos/Orca-tech logo.svg"
+          alt="Orca Tech"
+          width={28}
+          height={32}
+          className="pointer-events-none absolute left-3 top-1/2 h-4 w-auto -translate-y-1/2 opacity-80"
+          unoptimized
+        />
       </div>
     </footer>
   );
